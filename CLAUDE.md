@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-React + TypeScript app using Vite and MUI (Material UI). Node.js 22 (managed via asdf).
+React + TypeScript PWA using Vite, MUI (Material UI), and vite-plugin-pwa. Node.js 22 (managed via asdf).
 
 ## Commands
 
@@ -19,3 +19,10 @@ React + TypeScript app using Vite and MUI (Material UI). Node.js 22 (managed via
 - `src/App.tsx` - Root application component
 - MUI's `createTheme()` in main.tsx controls the global theme
 - Styling is done via MUI's `sx` prop and component props (no separate CSS files)
+
+## PWA
+
+- Configured via `vite-plugin-pwa` in `vite.config.ts` with `registerType: 'autoUpdate'`
+- `devOptions.enabled: true` makes the manifest and service worker available in dev mode
+- Web app manifest, service worker, and workbox files are auto-generated at build time in `dist/`
+- PWA icons are placeholder PNGs in `public/` (pwa-192x192.png, pwa-512x512.png) — replace with real assets
