@@ -4,7 +4,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-React + TypeScript PWA using Vite, MUI (Material UI), and vite-plugin-pwa. Node.js 22 (managed via asdf).
+Investment portfolio management PWA. React + TypeScript using Vite, MUI (Material UI), and vite-plugin-pwa. Node.js 22 (managed via asdf).
+
+## Domain
+
+The app lets users define an investment portfolio and calculate how to distribute new investments.
+
+- A **Portfolio** contains groups.
+- A **Group** has a target percentage of the portfolio and a deviation threshold (acceptable drift from target). All group percentages must total 100%.
+- An **Asset** belongs to exactly one group (via `groupId`). Assets are stored separately from the portfolio, not nested inside groups.
+  - Type `unit`: purchased in discrete units at a price (e.g. stocks).
+  - Type `fixed`: a fixed monetary amount in a fixed-income investment.
+  - An asset can be **deactivated** — it still counts toward its group's current value but is excluded when calculating new investments.
+
+### Investment calculation
+
+The user provides: current value of each asset, unit prices for unit-type assets, and the total amount to invest. The app distributes the new investment across groups respecting target percentages and deviation thresholds, then determines how many units to buy (for unit-type) or how much to allocate (for fixed-type).
+
+## Data model
+
+- `Portfolio { groups: Group[] }`
+- `Group { id, name, targetPercentage, deviationThreshold }`
+- `Asset { id, groupId, name, type: 'unit' | 'fixed', active }`
+- Assets reference groups; portfolio only contains groups
+- Data persisted to localStorage
 
 ## Commands
 
