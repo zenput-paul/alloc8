@@ -27,7 +27,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `Group { id, name, targetPercentage, deviationThreshold }`
 - `Asset { id, groupId, name, type: 'unit' | 'fixed', active }`
 - Assets reference groups; portfolio only contains groups
-- Data persisted to localStorage
+- Data persisted to IndexedDB via RxDB
 
 ## Commands
 
@@ -38,10 +38,17 @@ The user provides: current value of each asset, unit prices for unit-type assets
 
 ## Architecture
 
-- `src/main.tsx` - Entry point; sets up MUI ThemeProvider and CssBaseline
+- `src/main.tsx` - Entry point; sets up MUI ThemeProvider, CssBaseline, and DatabaseProvider
 - `src/App.tsx` - Root application component
+- `src/types.ts` - Core type definitions (Group, Asset, Portfolio, AssetInput, AssetAllocation)
+- `src/db/index.ts` - RxDB database creation and collection type exports
+- `src/db/schemas/group.ts` - Group collection schema
+- `src/db/schemas/asset.ts` - Asset collection schema (uses `ref: 'groups'` for groupId)
+- `src/db/DatabaseProvider.tsx` - Initializes RxDB and provides it via rxdb-hooks `Provider`
 - MUI's `createTheme()` in main.tsx controls the global theme
 - Styling is done via MUI's `sx` prop and component props (no separate CSS files)
+- Use `useRxCollection` and `useRxQuery` from `rxdb-hooks` to read data in components
+- Use type-only imports (`import type`) for types — `verbatimModuleSyntax` is enabled
 
 ## PWA
 

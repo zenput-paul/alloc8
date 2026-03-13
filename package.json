@@ -16,6 +16,9 @@
     "@mui/material": "^7.3.9",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "rxdb": "^16.21.1",
+    "rxdb-hooks": "^5.0.2",
+    "rxjs": "^7.8.2",
     "vite-plugin-pwa": "^1.2.0"
   },
   "devDependencies": {
