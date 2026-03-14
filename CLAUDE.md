@@ -19,7 +19,9 @@ The app lets users define an investment portfolio and calculate how to distribut
 
 ### Investment calculation
 
-The user provides: current value of each asset, unit prices for unit-type assets, and the total amount to invest. The app distributes the new investment across groups respecting target percentages and deviation thresholds, then determines how many units to buy (for unit-type) or how much to allocate (for fixed-type).
+The user provides: current value of each asset, unit prices for unit-type assets, and the total amount to invest. The app distributes the new investment across groups respecting target percentages and deviation thresholds, then determines how many units to buy (for unit-type) or how much to allocate (for fixed-type). After initial allocation, leftover from unit-type rounding is reinvested by buying additional units, prioritizing groups furthest below target.
+
+**Constraint:** Every group must have at least one active asset. The calculator throws an error if a group has no active assets, since it cannot receive investment.
 
 ## Data model
 
@@ -45,6 +47,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/App.tsx` - Responsive nav shell: BottomNavigation on mobile, Tabs in AppBar on desktop; switches between Portfolio and Calculator views
 - `src/components/portfolio/PortfolioView.tsx` - Portfolio view (group list, CRUD)
 - `src/components/calculator/CalculatorView.tsx` - Calculator view (input form, results)
+- `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies
 - `src/types.ts` - Core type definitions (Group, Asset, Portfolio, AssetInput, AssetAllocation)
 - `src/db/index.ts` - RxDB database creation and collection type exports
 - `src/db/schemas/group.ts` - Group collection schema
