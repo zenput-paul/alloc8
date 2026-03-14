@@ -35,11 +35,16 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `npm run build` - Type-check and build for production
 - `npm run preview` - Preview production build
 - `npx tsc --noEmit` - Type-check only
+- `npx vitest run` - Run unit/component tests
+- `npx vitest run <path>` - Run specific test file
+- `npx playwright test` - Run e2e tests
 
 ## Architecture
 
 - `src/main.tsx` - Entry point; sets up MUI ThemeProvider, CssBaseline, and DatabaseProvider
-- `src/App.tsx` - Root application component
+- `src/App.tsx` - Responsive nav shell: BottomNavigation on mobile, Tabs in AppBar on desktop; switches between Portfolio and Calculator views
+- `src/components/portfolio/PortfolioView.tsx` - Portfolio view (group list, CRUD)
+- `src/components/calculator/CalculatorView.tsx` - Calculator view (input form, results)
 - `src/types.ts` - Core type definitions (Group, Asset, Portfolio, AssetInput, AssetAllocation)
 - `src/db/index.ts` - RxDB database creation and collection type exports
 - `src/db/schemas/group.ts` - Group collection schema
@@ -49,6 +54,13 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - Styling is done via MUI's `sx` prop and component props (no separate CSS files)
 - Use `useRxCollection` and `useRxQuery` from `rxdb-hooks` to read data in components
 - Use type-only imports (`import type`) for types — `verbatimModuleSyntax` is enabled
+
+## Testing
+
+- **Vitest** + **jsdom** for unit/component tests (`vitest.config.ts`)
+- **React Testing Library** for component rendering and interaction
+- **Playwright** for e2e tests (`playwright.config.ts`, `e2e/` directory)
+- Test setup file: `src/test-setup.ts` (imports jest-dom matchers)
 
 ## PWA
 
