@@ -4,7 +4,7 @@ export const assetSchema = {
   type: 'object',
   properties: {
     id: { type: 'string', maxLength: 100 },
-    groupId: { type: 'string', ref: 'groups' },
+    groupId: { type: 'string', ref: 'groups', maxLength: 100 },
     name: { type: 'string' },
     type: { type: 'string', enum: ['unit', 'fixed'] },
     active: { type: 'boolean' },

@@ -1,12 +1,21 @@
 import { createRxDatabase, type RxDatabase, type RxCollection, addRxPlugin } from 'rxdb'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
+import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
 import type { Group, Asset } from '../types'
 import { groupSchema } from './schemas/group'
 import { assetSchema } from './schemas/asset'
 
 if (import.meta.env.DEV) {
   addRxPlugin(RxDBDevModePlugin)
+}
+
+function getStorage() {
+  const base = getRxStorageDexie()
+  if (import.meta.env.DEV) {
+    return wrappedValidateAjvStorage({ storage: base })
+  }
+  return base
 }
 
 export type GroupCollection = RxCollection<Group>
@@ -25,7 +34,7 @@ export function getDatabase(): Promise<Database> {
   if (!dbPromise) {
     dbPromise = createRxDatabase<DatabaseCollections>({
       name: 'portfoliodb',
-      storage: getRxStorageDexie(),
+      storage: getStorage(),
     }).then(async (db) => {
       await db.addCollections({
         groups: { schema: groupSchema },
