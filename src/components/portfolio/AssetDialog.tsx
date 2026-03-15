@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useRxCollection } from 'rxdb-hooks'
+import { useTranslation } from 'react-i18next'
 import type { Asset, AssetType } from '../../types'
 
 interface AssetDialogProps {
@@ -54,10 +55,11 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
   const [name, setName] = useState(editItem?.name ?? '')
   const [type, setType] = useState<AssetType>(editItem?.type ?? 'unit')
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const { t } = useTranslation()
 
   function validate(): boolean {
     const newErrors: Record<string, string> = {}
-    if (!name.trim()) newErrors.name = 'Name is required'
+    if (!name.trim()) newErrors.name = t('assetDialog.nameRequired')
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -83,11 +85,11 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
 
   return (
     <form onSubmit={e => { e.preventDefault(); handleSave() }}>
-      <DialogTitle>{editItem ? 'Edit Asset' : 'Add Asset'}</DialogTitle>
+      <DialogTitle>{editItem ? t('assetDialog.editTitle') : t('assetDialog.addTitle')}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           <TextField
-            label="Name"
+            label={t('assetDialog.name')}
             value={name}
             onChange={e => setName(e.target.value)}
             error={!!errors.name}
@@ -97,7 +99,7 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
           />
           <Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
-              Type
+              {t('assetDialog.type')}
             </Typography>
             <ToggleButtonGroup
               value={type}
@@ -106,16 +108,16 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
               fullWidth
               size="small"
             >
-              <ToggleButton value="unit">Stocks (units)</ToggleButton>
-              <ToggleButton value="fixed">Fixed amount</ToggleButton>
+              <ToggleButton value="unit">{t('assetDialog.stocksUnits')}</ToggleButton>
+              <ToggleButton value="fixed">{t('assetDialog.fixedAmount')}</ToggleButton>
             </ToggleButtonGroup>
           </Box>
         </Stack>
       </DialogContent>
       <DialogActions sx={{ px: 3, py: 2 }}>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t('assetDialog.cancel')}</Button>
         <Button type="submit" variant="contained">
-          {editItem ? 'Save' : 'Add'}
+          {editItem ? t('assetDialog.save') : t('assetDialog.add')}
         </Button>
       </DialogActions>
     </form>

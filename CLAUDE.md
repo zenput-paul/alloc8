@@ -83,6 +83,17 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - **Playwright** for e2e tests (`playwright.config.ts`, `e2e/` directory)
 - Test setup file: `src/test-setup.ts` (imports jest-dom matchers)
 
+## Internationalization (i18n)
+
+- `react-i18next` + `i18next` with `i18next-browser-languagedetector`
+- `src/i18n/index.ts` — i18n config, auto-detects browser language, falls back to English
+- `src/i18n/en.json` — English translations
+- `src/i18n/es.json` — Spanish translations
+- All UI strings use `t('key')` from `useTranslation()` — no hardcoded strings in components
+- Language switcher in the app bar (globe icon)
+- i18next pluralization via `_one` / `_other` suffixes (e.g. `assetCount`)
+- Imported in `src/main.tsx` (side-effect import) and `src/test-setup.ts` for tests
+
 ## PWA
 
 - Configured via `vite-plugin-pwa` in `vite.config.ts` with `registerType: 'autoUpdate'`

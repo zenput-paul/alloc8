@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import { useRxCollection, useRxQuery } from 'rxdb-hooks'
+import { useTranslation } from 'react-i18next'
 import type { Group, Asset } from '../../types'
 import { GroupCard } from './GroupCard'
 import { GroupDialog } from './GroupDialog'
@@ -23,6 +24,7 @@ export function PortfolioView() {
   const [groupDialogOpen, setGroupDialogOpen] = useState(false)
   const [editingGroup, setEditingGroup] = useState<Group | undefined>()
   const [deletingGroup, setDeletingGroup] = useState<Group | undefined>()
+  const { t } = useTranslation()
 
   const groupsCollection = useRxCollection<Group>('groups')
   const assetsCollection = useRxCollection<Asset>('assets')
@@ -65,20 +67,20 @@ export function PortfolioView() {
     <Container maxWidth="sm" sx={{ mt: 2, mb: 2 }}>
       <Stack spacing={2}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography variant="h5">Portfolio</Typography>
+          <Typography variant="h5">{t('portfolio.title')}</Typography>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={handleAddGroup}
             size="small"
           >
-            Add Group
+            {t('portfolio.addGroup')}
           </Button>
         </Stack>
 
         {groups.length > 0 && totalPercentage !== 100 && (
           <Alert severity="warning">
-            Group percentages total {totalPercentage}% — must equal 100%.
+            {t('portfolio.percentageWarning', { total: totalPercentage })}
           </Alert>
         )}
 
@@ -100,22 +102,22 @@ export function PortfolioView() {
 
         {!groupsFetching && groups.length === 0 && (
           <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
-            No groups yet. Add a group to get started.
+            {t('portfolio.emptyState')}
           </Typography>
         )}
       </Stack>
 
       <Dialog open={!!deletingGroup} onClose={() => setDeletingGroup(undefined)}>
-        <DialogTitle>Delete Group</DialogTitle>
+        <DialogTitle>{t('portfolio.deleteGroupTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete "{deletingGroup?.name}" and all its assets?
+            {t('portfolio.deleteGroupConfirm', { name: deletingGroup?.name })}
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, py: 2 }}>
-          <Button onClick={() => setDeletingGroup(undefined)}>Cancel</Button>
+          <Button onClick={() => setDeletingGroup(undefined)}>{t('portfolio.cancel')}</Button>
           <Button onClick={handleConfirmDeleteGroup} color="error" variant="contained">
-            Delete
+            {t('portfolio.delete')}
           </Button>
         </DialogActions>
       </Dialog>

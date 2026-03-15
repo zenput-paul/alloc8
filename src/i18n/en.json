@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "portfolio": "Portfolio",
+    "calculator": "Calculator",
+    "changeLanguage": "Change language"
+  },
+  "portfolio": {
+    "title": "Portfolio",
+    "addGroup": "Add Group",
+    "percentageWarning": "Group percentages total {{total}}% — must equal 100%.",
+    "emptyState": "No groups yet. Add a group to get started.",
+    "deleteGroupTitle": "Delete Group",
+    "deleteGroupConfirm": "Are you sure you want to delete \"{{name}}\" and all its assets?",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "group": {
+    "target": "Target: {{value}}%",
+    "deviation": "Deviation: ±{{value}}%",
+    "assetCount_one": "{{count}} asset",
+    "assetCount_other": "{{count}} assets",
+    "noActiveAssets": "This group has no active assets. The calculator requires at least one.",
+    "noAssetsYet": "No assets yet — add one to get started",
+    "inactiveHint": "Inactive assets still count toward the group's current value but won't receive new investments.",
+    "addAsset": "Add Asset",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteAssetTitle": "Delete Asset",
+    "deleteAssetConfirm": "Are you sure you want to delete \"{{name}}\"?",
+    "cancel": "Cancel"
+  },
+  "groupDialog": {
+    "addTitle": "Add Group",
+    "editTitle": "Edit Group",
+    "name": "Name",
+    "target": "Target",
+    "deviationThreshold": "Deviation Threshold",
+    "nameRequired": "Name is required",
+    "mustBePositive": "Must be a number > 0",
+    "mustBeNonNegative": "Must be a number >= 0",
+    "mustBeLessThanTarget": "Must be less than target",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add"
+  },
+  "assetDialog": {
+    "addTitle": "Add Asset",
+    "editTitle": "Edit Asset",
+    "name": "Name",
+    "type": "Type",
+    "stocksUnits": "Stocks (units)",
+    "fixedAmount": "Fixed amount",
+    "nameRequired": "Name is required",
+    "cancel": "Cancel",
+    "save": "Save",
+    "add": "Add"
+  },
+  "calculator": {
+    "title": "Calculator"
+  }
+}

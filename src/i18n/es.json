@@ -1,0 +1,61 @@
+{
+  "nav": {
+    "portfolio": "Portafolio",
+    "calculator": "Calculadora",
+    "changeLanguage": "Cambiar idioma"
+  },
+  "portfolio": {
+    "title": "Portafolio",
+    "addGroup": "Agregar Grupo",
+    "percentageWarning": "Los porcentajes de los grupos suman {{total}}% — deben ser igual a 100%.",
+    "emptyState": "No hay grupos aún. Agrega un grupo para comenzar.",
+    "deleteGroupTitle": "Eliminar Grupo",
+    "deleteGroupConfirm": "¿Estás seguro de que deseas eliminar \"{{name}}\" y todos sus activos?",
+    "cancel": "Cancelar",
+    "delete": "Eliminar"
+  },
+  "group": {
+    "target": "Objetivo: {{value}}%",
+    "deviation": "Desviación: ±{{value}}%",
+    "assetCount_one": "{{count}} activo",
+    "assetCount_other": "{{count}} activos",
+    "noActiveAssets": "Este grupo no tiene activos activos. La calculadora requiere al menos uno.",
+    "noAssetsYet": "No hay activos aún — agrega uno para comenzar",
+    "inactiveHint": "Los activos inactivos aún cuentan para el valor actual del grupo pero no recibirán nuevas inversiones.",
+    "addAsset": "Agregar Activo",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "deleteAssetTitle": "Eliminar Activo",
+    "deleteAssetConfirm": "¿Estás seguro de que deseas eliminar \"{{name}}\"?",
+    "cancel": "Cancelar"
+  },
+  "groupDialog": {
+    "addTitle": "Agregar Grupo",
+    "editTitle": "Editar Grupo",
+    "name": "Nombre",
+    "target": "Objetivo",
+    "deviationThreshold": "Umbral de Desviación",
+    "nameRequired": "El nombre es obligatorio",
+    "mustBePositive": "Debe ser un número > 0",
+    "mustBeNonNegative": "Debe ser un número >= 0",
+    "mustBeLessThanTarget": "Debe ser menor que el objetivo",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "add": "Agregar"
+  },
+  "assetDialog": {
+    "addTitle": "Agregar Activo",
+    "editTitle": "Editar Activo",
+    "name": "Nombre",
+    "type": "Tipo",
+    "stocksUnits": "Acciones (unidades)",
+    "fixedAmount": "Monto fijo",
+    "nameRequired": "El nombre es obligatorio",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "add": "Agregar"
+  },
+  "calculator": {
+    "title": "Calculadora"
+  }
+}

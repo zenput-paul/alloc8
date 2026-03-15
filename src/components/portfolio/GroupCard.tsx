@@ -29,6 +29,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useRxCollection, useRxQuery } from 'rxdb-hooks'
+import { useTranslation } from 'react-i18next'
 import type { Group, Asset } from '../../types'
 import { AssetDialog } from './AssetDialog'
 
@@ -45,6 +46,7 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
   const [editingAsset, setEditingAsset] = useState<Asset | undefined>()
   const [deletingAsset, setDeletingAsset] = useState<Asset | undefined>()
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null)
+  const { t } = useTranslation()
 
   const assetsCollection = useRxCollection<Asset>('assets')
   const query = assetsCollection?.find({ selector: { groupId: group.id } })
@@ -101,13 +103,13 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
               <Typography variant="h6">{group.name}</Typography>
               <Stack direction="row" spacing={2}>
                 <Typography variant="body2" color="text.secondary">
-                  Target: {group.targetPercentage}%
+                  {t('group.target', { value: group.targetPercentage })}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Deviation: ±{group.deviationThreshold}%
+                  {t('group.deviation', { value: group.deviationThreshold })}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {assets.length} {assets.length === 1 ? 'asset' : 'assets'}
+                  {t('group.assetCount', { count: assets.length })}
                 </Typography>
               </Stack>
             </Box>
@@ -118,11 +120,11 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
               <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={() => setMenuAnchor(null)}>
                 <MenuItem onClick={() => { setMenuAnchor(null); onEdit(group) }}>
                   <ListItemIcon><EditIcon fontSize="small" /></ListItemIcon>
-                  Edit
+                  {t('group.edit')}
                 </MenuItem>
                 <MenuItem onClick={() => { setMenuAnchor(null); onDelete(group) }}>
                   <ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>
-                  Delete
+                  {t('group.delete')}
                 </MenuItem>
               </Menu>
               <IconButton
@@ -139,7 +141,7 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
           </Stack>
           {!isFetching && !hasActiveAsset && (
             <Alert severity="warning" sx={{ mt: 1 }}>
-              This group has no active assets. The calculator requires at least one.
+              {t('group.noActiveAssets')}
             </Alert>
           )}
         </CardContent>
@@ -149,7 +151,7 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
               <ListItem key={asset.id} secondaryAction={<AssetActions asset={asset} />}>
                 <ListItemText
                   primary={asset.name}
-                  secondary={asset.type === 'unit' ? 'Stocks (units)' : 'Fixed amount'}
+                  secondary={asset.type === 'unit' ? t('assetDialog.stocksUnits') : t('assetDialog.fixedAmount')}
                   sx={{ opacity: asset.active ? 1 : 0.5 }}
                 />
               </ListItem>
@@ -157,7 +159,7 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
             {assets.length === 0 && (
               <ListItem>
                 <ListItemText
-                  primary="No assets yet — add one to get started"
+                  primary={t('group.noAssetsYet')}
                   sx={{ color: 'text.secondary', fontStyle: 'italic' }}
                 />
               </ListItem>
@@ -165,28 +167,28 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
           </List>
           {assets.some(a => !a.active) && (
             <Typography variant="caption" color="text.secondary" sx={{ px: 2, pb: 1, display: 'block' }}>
-              Inactive assets still count toward the group's current value but won't receive new investments.
+              {t('group.inactiveHint')}
             </Typography>
           )}
           <CardActions>
             <Button size="small" startIcon={<AddIcon />} onClick={handleAddAsset}>
-              Add Asset
+              {t('group.addAsset')}
             </Button>
           </CardActions>
         </Collapse>
       </Card>
 
       <Dialog open={!!deletingAsset} onClose={() => setDeletingAsset(undefined)}>
-        <DialogTitle>Delete Asset</DialogTitle>
+        <DialogTitle>{t('group.deleteAssetTitle')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete "{deletingAsset?.name}"?
+            {t('group.deleteAssetConfirm', { name: deletingAsset?.name })}
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ px: 3, py: 2 }}>
-          <Button onClick={() => setDeletingAsset(undefined)}>Cancel</Button>
+          <Button onClick={() => setDeletingAsset(undefined)}>{t('group.cancel')}</Button>
           <Button onClick={handleConfirmDeleteAsset} color="error" variant="contained">
-            Delete
+            {t('group.delete')}
           </Button>
         </DialogActions>
       </Dialog>
