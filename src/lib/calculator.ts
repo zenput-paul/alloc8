@@ -11,7 +11,18 @@ export function calculateAllocations(
   assetInputs: AssetInput[],
   totalInvestment: number,
 ): AllocationResult {
+  const totalTargetPercentage = groups.reduce((sum, g) => sum + g.targetPercentage, 0)
+  if (totalTargetPercentage !== 100) {
+    throw new Error(`Group target percentages total ${totalTargetPercentage}%, must equal 100%`)
+  }
+
   for (const group of groups) {
+    if (group.targetPercentage <= 0) {
+      throw new Error(`Group "${group.name}" has a target percentage of 0% or less`)
+    }
+    if (group.deviationThreshold >= group.targetPercentage) {
+      throw new Error(`Group "${group.name}" has a deviation threshold >= its target percentage`)
+    }
     const hasActive = assets.some(a => a.groupId === group.id && a.active)
     if (!hasActive) {
       throw new Error(`Group "${group.name}" has no active assets`)

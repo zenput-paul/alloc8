@@ -21,7 +21,12 @@ The app lets users define an investment portfolio and calculate how to distribut
 
 The user provides: current value of each asset, unit prices for unit-type assets, and the total amount to invest. The app distributes the new investment across groups respecting target percentages and deviation thresholds, then determines how many units to buy (for unit-type) or how much to allocate (for fixed-type). After initial allocation, leftover from unit-type rounding is reinvested by buying additional units, prioritizing groups furthest below target.
 
-**Constraint:** Every group must have at least one active asset. The calculator throws an error if a group has no active assets, since it cannot receive investment.
+**Constraints:**
+- Group target percentages must total exactly 100%.
+- Every group must have a target percentage > 0%.
+- Deviation threshold must be less than the target percentage.
+- Every group must have at least one active asset.
+- The calculator throws if constraints are violated; the UI validates in dialogs.
 
 ## Data model
 
@@ -45,7 +50,10 @@ The user provides: current value of each asset, unit prices for unit-type assets
 
 - `src/main.tsx` - Entry point; sets up MUI ThemeProvider, CssBaseline, and DatabaseProvider
 - `src/App.tsx` - Responsive nav shell: BottomNavigation on mobile, Tabs in AppBar on desktop; switches between Portfolio and Calculator views
-- `src/components/portfolio/PortfolioView.tsx` - Portfolio view (group list, CRUD)
+- `src/components/portfolio/PortfolioView.tsx` - Portfolio view: group list, validation banner (% must total 100), CRUD
+- `src/components/portfolio/GroupCard.tsx` - Expandable card for a group, lists assets with Switch toggle, three-dot menu for edit/delete
+- `src/components/portfolio/GroupDialog.tsx` - Create/edit group dialog with validation and `%` InputAdornment
+- `src/components/portfolio/AssetDialog.tsx` - Create/edit asset dialog with Stocks (units)/Fixed amount type switching
 - `src/components/calculator/CalculatorView.tsx` - Calculator view (input form, results)
 - `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies
 - `src/types.ts` - Core type definitions (Group, Asset, Portfolio, AssetInput, AssetAllocation)
@@ -55,6 +63,9 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/db/DatabaseProvider.tsx` - Initializes RxDB and provides it via rxdb-hooks `Provider`
 - MUI's `createTheme()` in main.tsx controls the global theme
 - Styling is done via MUI's `sx` prop and component props (no separate CSS files)
+- Dialogs use a key pattern: outer Dialog + inner form component that remounts via key on close
+- Dialog forms are wrapped in `<form>` with `onSubmit` for Enter key support
+- Destructive actions (delete group/asset) use a confirmation dialog
 - Use `useRxCollection` and `useRxQuery` from `rxdb-hooks` to read data in components
 - Use type-only imports (`import type`) for types — `verbatimModuleSyntax` is enabled
 

@@ -1,4 +1,3 @@
-import { describe, it, expect } from "vitest";
 import { calculateAllocations } from "./calculator";
 import type { Group, Asset, AssetInput } from "../types";
 
@@ -355,6 +354,54 @@ describe("calculateAllocations", () => {
     const a2 = result.allocations.find((a) => a.assetId === "a2")!;
     expect(a1.amountToInvest).toBeCloseTo(0);
     expect(a2.amountToInvest).toBeCloseTo(100);
+  });
+
+  it("throws when a group has target percentage of 0%", () => {
+    const groups = [
+      makeGroup({ id: "g1", targetPercentage: 0, deviationThreshold: 5 }),
+      makeGroup({ id: "g2", targetPercentage: 100, deviationThreshold: 5 }),
+    ];
+    const assets = [
+      makeAsset({ id: "a1", groupId: "g1" }),
+      makeAsset({ id: "a2", groupId: "g2" }),
+    ];
+    const inputs = [makeInput("a1", 0), makeInput("a2", 0)];
+
+    expect(() => calculateAllocations(groups, assets, inputs, 100)).toThrow(
+      'Group "Group g1" has a target percentage of 0% or less',
+    );
+  });
+
+  it("throws when group target percentages do not total 100%", () => {
+    const groups = [
+      makeGroup({ id: "g1", targetPercentage: 60, deviationThreshold: 5 }),
+      makeGroup({ id: "g2", targetPercentage: 30, deviationThreshold: 5 }),
+    ];
+    const assets = [
+      makeAsset({ id: "a1", groupId: "g1" }),
+      makeAsset({ id: "a2", groupId: "g2" }),
+    ];
+    const inputs = [makeInput("a1", 0), makeInput("a2", 0)];
+
+    expect(() => calculateAllocations(groups, assets, inputs, 100)).toThrow(
+      "Group target percentages total 90%, must equal 100%",
+    );
+  });
+
+  it("throws when a group has deviation threshold >= target percentage", () => {
+    const groups = [
+      makeGroup({ id: "g1", targetPercentage: 5, deviationThreshold: 10 }),
+      makeGroup({ id: "g2", targetPercentage: 95, deviationThreshold: 5 }),
+    ];
+    const assets = [
+      makeAsset({ id: "a1", groupId: "g1" }),
+      makeAsset({ id: "a2", groupId: "g2" }),
+    ];
+    const inputs = [makeInput("a1", 0), makeInput("a2", 0)];
+
+    expect(() => calculateAllocations(groups, assets, inputs, 100)).toThrow(
+      'Group "Group g1" has a deviation threshold >= its target percentage',
+    );
   });
 
   it("throws when a group has no assets at all", () => {
