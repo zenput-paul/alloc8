@@ -13,9 +13,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['vite.svg'],
       manifest: {
-        name: 'Clause Test',
-        short_name: 'Clause',
-        description: 'Clause Test PWA',
+        name: 'Alloc8',
+        short_name: 'Alloc8',
+        description: 'Investment portfolio allocation manager',
         theme_color: '#1976d2',
         background_color: '#ffffff',
         display: 'standalone',
