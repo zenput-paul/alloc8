@@ -105,6 +105,14 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - i18next pluralization via `_one` / `_other` suffixes (e.g. `assetCount`)
 - Imported in `src/main.tsx` (side-effect import) and `src/test-setup.ts` for tests
 
+## Security
+
+- All data is local-only (IndexedDB via RxDB) — no server, no network exposure
+- Current data (group names, percentages, allocation plans) is low-risk planning data
+- IndexedDB is not encrypted — acceptable for current scope
+- If the app ever stores real account numbers or balances, add RxDB field encryption
+- RxDB cleanup plugin purges soft-deleted documents on startup (`src/db/index.ts`)
+
 ## PWA
 
 - Configured via `vite-plugin-pwa` in `vite.config.ts` with `registerType: 'autoUpdate'`

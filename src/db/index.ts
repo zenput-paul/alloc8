@@ -1,10 +1,13 @@
 import { createRxDatabase, type RxDatabase, type RxCollection, addRxPlugin } from 'rxdb'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
+import { RxDBCleanupPlugin } from 'rxdb/plugins/cleanup'
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
 import type { Group, Asset } from '../types'
 import { groupSchema } from './schemas/group'
 import { assetSchema } from './schemas/asset'
+
+addRxPlugin(RxDBCleanupPlugin)
 
 if (import.meta.env.DEV) {
   addRxPlugin(RxDBDevModePlugin)
@@ -40,6 +43,9 @@ export function getDatabase(): Promise<Database> {
         groups: { schema: groupSchema },
         assets: { schema: assetSchema },
       })
+      // Purge soft-deleted documents on startup
+      await db.groups.cleanup(0)
+      await db.assets.cleanup(0)
       return db
     })
   }
