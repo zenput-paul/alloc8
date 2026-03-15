@@ -36,6 +36,13 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - Assets reference groups; portfolio only contains groups
 - Data persisted to IndexedDB via RxDB
 
+## Workflow
+
+- When making code changes, always create or update related tests
+- After changes, check if CLAUDE.md needs updating (new files, patterns, architecture, commands)
+- Work one phase at a time — complete and verify before moving to the next
+- Prefer explicit behavior over implicit defaults (no silent coercion, require intentional values)
+
 ## Commands
 
 - `npm run dev` - Start dev server
