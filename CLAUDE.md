@@ -40,8 +40,11 @@ The user provides: current value of each asset, unit prices for unit-type assets
 
 - When making code changes, always create or update related tests
 - After changes, check if CLAUDE.md needs updating (new files, patterns, architecture, commands)
+- Run `/check` before every commit — do not commit if checks fail
+- Run `/i18n` after adding or modifying UI strings to catch missing translations
 - Work one phase at a time — complete and verify before moving to the next
 - Prefer explicit behavior over implicit defaults (no silent coercion, require intentional values)
+- Spanish translations (`es.json`) should be reviewed by a native speaker — flag regional variations
 
 ## Commands
 
@@ -52,6 +55,14 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `npx vitest run` - Run unit/component tests
 - `npx vitest run <path>` - Run specific test file
 - `npx playwright test` - Run e2e tests
+
+### Slash commands
+
+- `/check` - Run type-check, lint, tests, and IDE diagnostics
+- `/test` - Run Vitest (optionally with a file path)
+- `/commit` - Run checks, then commit and push
+- `/i18n` - Check translation files for missing or unused keys
+- `/update-docs` - Update CLAUDE.md based on recent changes
 
 ## Architecture
 
