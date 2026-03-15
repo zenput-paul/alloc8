@@ -5,7 +5,13 @@ import { DatabaseProvider } from './db/DatabaseProvider'
 import './i18n'
 import App from './App.tsx'
 
-const theme = createTheme()
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#2E7D32',
+    },
+  },
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

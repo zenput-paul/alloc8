@@ -11,12 +11,12 @@ export default defineConfig({
         enabled: true,
       },
       registerType: 'autoUpdate',
-      includeAssets: ['vite.svg'],
+      includeAssets: ['icon.svg'],
       manifest: {
         name: 'Alloc8',
         short_name: 'Alloc8',
         description: 'Investment portfolio allocation manager',
-        theme_color: '#1976d2',
+        theme_color: '#2E7D32',
         background_color: '#ffffff',
         display: 'standalone',
         icons: [

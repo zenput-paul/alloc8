@@ -79,7 +79,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/db/schemas/group.ts` - Group collection schema
 - `src/db/schemas/asset.ts` - Asset collection schema (uses `ref: 'groups'` for groupId)
 - `src/db/DatabaseProvider.tsx` - Initializes RxDB and provides it via rxdb-hooks `Provider`
-- MUI's `createTheme()` in main.tsx controls the global theme
+- MUI's `createTheme()` in main.tsx controls the global theme (primary: `#2E7D32` dark green)
 - Styling is done via MUI's `sx` prop and component props (no separate CSS files)
 - Dialogs use a key pattern: outer Dialog + inner form component that remounts via key on close
 - Dialog forms are wrapped in `<form>` with `onSubmit` for Enter key support
@@ -110,4 +110,4 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - Configured via `vite-plugin-pwa` in `vite.config.ts` with `registerType: 'autoUpdate'`
 - `devOptions.enabled: true` makes the manifest and service worker available in dev mode
 - Web app manifest, service worker, and workbox files are auto-generated at build time in `dist/`
-- PWA icons are placeholder PNGs in `public/` (pwa-192x192.png, pwa-512x512.png) — replace with real assets
+- PWA icons in `public/`: `icon.svg` (source), `pwa-192x192.png`, `pwa-512x512.png` (generated via sharp-cli)
