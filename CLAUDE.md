@@ -45,6 +45,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - Work one phase at a time — complete and verify before moving to the next
 - Prefer explicit behavior over implicit defaults (no silent coercion, require intentional values)
 - All interactive elements without visible text (IconButtons, icon-only controls) must have an `aria-label` using an i18n key — for both accessibility and e2e testability
+- Prefer a single JSX return per component — use responsive `sx` props or conditional rendering over duplicated mobile/desktop branches
 - Spanish translations (`es.json`) should be reviewed by a native speaker — flag regional variations
 
 ## Commands
