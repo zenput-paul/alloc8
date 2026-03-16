@@ -54,9 +54,11 @@ export function CalculatorInputForm({
           type="number"
           fullWidth
           required
-          inputProps={{ min: 0, step: 'any' }}
-          InputProps={{
-            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          slotProps={{
+            htmlInput: { min: 0, step: 'any' },
+            input: {
+              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+            },
           }}
           value={totalInvestment}
           onChange={e => onTotalInvestmentChange(e.target.value)}
@@ -93,9 +95,11 @@ export function CalculatorInputForm({
                             size="small"
                             fullWidth
                             required
-                            inputProps={{ min: 0, step: 'any' }}
-                            InputProps={{
-                              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                            slotProps={{
+                              htmlInput: { min: 0, step: 'any' },
+                              input: {
+                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                              },
                             }}
                             value={inputs.currentValue}
                             onChange={e => onAssetInputChange(asset.id, 'currentValue', e.target.value)}
@@ -107,7 +111,7 @@ export function CalculatorInputForm({
                               size="small"
                               fullWidth
                               required={asset.active}
-                              inputProps={{ min: 0, step: 'any' }}
+                              slotProps={{ htmlInput: { min: 0, step: 'any' } }}
                               value={inputs.unitPrice}
                               onChange={e => onAssetInputChange(asset.id, 'unitPrice', e.target.value)}
                               disabled={!asset.active}

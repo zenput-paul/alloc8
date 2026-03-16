@@ -86,6 +86,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/db/DatabaseProvider.tsx` - Initializes RxDB and provides it via rxdb-hooks `Provider`
 - MUI's `createTheme()` in main.tsx controls the global theme (primary: `#2E7D32` dark green)
 - Styling is done via MUI's `sx` prop and component props (no separate CSS files)
+- MUI v7: use `slotProps` / `slots` API — never use deprecated props (`inputProps`, `InputProps`, `InputLabelProps`, etc.)
 - Dialogs use a key pattern: outer Dialog + inner form component that remounts via key on close
 - Dialog forms are wrapped in `<form>` with `onSubmit` for Enter key support
 - Destructive actions (delete group/asset) use a confirmation dialog
