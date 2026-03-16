@@ -56,7 +56,6 @@
     "add": "Agregar"
   },
   "calculator": {
-    "title": "Calculadora",
     "currentValue": "Valor Actual",
     "unitPrice": "Precio Unitario",
     "totalInvestment": "Monto a Invertir",
@@ -79,7 +78,6 @@
     "totalUnits": "Subtotal unidades",
     "totalFixed": "Subtotal fijo",
     "reset": "Reiniciar",
-    "units": "Unidades",
     "fixed": "Fijo",
     "inactive": "Inactivo"
   }

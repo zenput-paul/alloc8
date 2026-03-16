@@ -15,10 +15,6 @@ export interface Asset {
   active: boolean
 }
 
-export interface Portfolio {
-  groups: Group[]
-}
-
 export interface AssetInput {
   assetId: string
   currentValue: number

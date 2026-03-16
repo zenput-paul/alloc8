@@ -30,7 +30,6 @@ The user provides: current value of each asset, unit prices for unit-type assets
 
 ## Data model
 
-- `Portfolio { groups: Group[] }`
 - `Group { id, name, targetPercentage, deviationThreshold }`
 - `Asset { id, groupId, name, type: 'unit' | 'fixed', active }`
 - Assets reference groups; portfolio only contains groups
@@ -72,12 +71,13 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/components/portfolio/GroupCard.tsx` - Expandable card for a group, lists assets with Switch toggle, three-dot menu for edit/delete
 - `src/components/portfolio/GroupDialog.tsx` - Create/edit group dialog with validation and `%` InputAdornment
 - `src/components/portfolio/AssetDialog.tsx` - Create/edit asset dialog with Units/Fixed amount type switching
-- `src/components/calculator/CalculatorView.tsx` - Calculator orchestrator: loads data from RxDB, manages form state, computes group stats, two-column layout on desktop (form left, results right), single-column on mobile with scroll-to-results after calculation
+- `src/components/calculator/CalculatorView.tsx` - Calculator layout shell: two-column on desktop (form left, results right), single-column on mobile with scroll-to-results after calculation
+- `src/components/calculator/useCalculator.ts` - Calculator state hook: loads groups/assets from RxDB, manages form state, runs `calculateAllocations`, exposes `displayAllocations`/`displayRemainder` for the view
 - `src/components/calculator/CalculatorInputForm.tsx` - Calculator input form: grouped asset fields (current value + unit price), amount to invest, calculate/reset buttons, required field validation
 - `src/components/calculator/CalculatorResults.tsx` - Results table grouped by group with percentage stats (current → after, color-coded by deviation from target), subtotals by asset type, remainder alert
-- `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies
+- `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies. Uses `ON_TARGET_EPSILON` (0.01%) to avoid floating-point noise in on-target checks
 - `src/lib/formatNumber.ts` - Locale-aware number formatting (`formatCurrency`, `formatUnits`) using `Intl.NumberFormat`
-- `src/types.ts` - Core type definitions (Group, Asset, Portfolio, AssetInput, AssetAllocation)
+- `src/types.ts` - Core type definitions (Group, Asset, AssetInput, AssetAllocation, GroupStats)
 - `src/db/index.ts` - RxDB database creation and collection type exports
 - `src/db/schemas/group.ts` - Group collection schema
 - `src/db/schemas/asset.ts` - Asset collection schema (uses `ref: 'groups'` for groupId)
@@ -96,7 +96,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - **React Testing Library** for component rendering and interaction
 - **Playwright** for e2e tests (`playwright.config.ts`, `e2e/` directory)
 - Test setup file: `src/test-setup.ts` (imports jest-dom matchers)
-- Calculator component tests mock `rxdb-hooks` with a sentinel pattern that tracks collection names to distinguish groups vs assets queries
+- `CalculatorView` tests mock `useCalculator` (layout-only tests); `useCalculator` tests mock `rxdb-hooks` with a sentinel pattern that tracks collection names to distinguish groups vs assets queries
 
 ## Internationalization (i18n)
 

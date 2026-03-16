@@ -188,4 +188,31 @@ describe('useCalculator', () => {
 
     expect(result.current.groupStats.size).toBe(0)
   })
+
+  it('returns displayAllocations from emptyAllocations when no result', () => {
+    mockGroups = validGroups
+    mockAssets = validAssets
+    const { result } = renderHook(() => useCalculator())
+
+    expect(result.current.displayAllocations).toEqual(result.current.emptyAllocations)
+    expect(result.current.displayRemainder).toBe(0)
+  })
+
+  it('returns displayAllocations from result after calculation', () => {
+    mockGroups = validGroups
+    mockAssets = validAssets
+    const { result } = renderHook(() => useCalculator())
+
+    act(() => {
+      result.current.handleAssetInputChange('a1', 'currentValue', '600')
+      result.current.handleAssetInputChange('a1', 'unitPrice', '200')
+      result.current.handleAssetInputChange('a2', 'currentValue', '400')
+      result.current.handleTotalInvestmentChange('1000')
+    })
+
+    act(() => result.current.handleCalculate())
+
+    expect(result.current.displayAllocations).toEqual(result.current.result!.allocations)
+    expect(result.current.displayRemainder).toBe(result.current.result!.remainder)
+  })
 })

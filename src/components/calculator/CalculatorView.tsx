@@ -60,8 +60,8 @@ export function CalculatorView() {
       <CalculatorResults
         groups={calc.groups}
         assets={calc.assets}
-        allocations={calc.result?.allocations ?? calc.emptyAllocations}
-        remainder={calc.result?.remainder ?? 0}
+        allocations={calc.displayAllocations}
+        remainder={calc.displayRemainder}
         groupStats={calc.groupStats}
       />
     </Box>

@@ -77,6 +77,8 @@ export function useCalculator() {
     amountToInvest: 0,
   }))
 
+  const displayAllocations = result?.allocations ?? emptyAllocations
+  const displayRemainder = result?.remainder ?? 0
   const groupStats: Map<string, GroupStats> = result?.groupStats ?? new Map()
 
   return {
@@ -93,6 +95,8 @@ export function useCalculator() {
     groupStats,
     error,
     emptyAllocations,
+    displayAllocations,
+    displayRemainder,
     handleAssetInputChange,
     handleTotalInvestmentChange: setTotalInvestment,
     handleCalculate,

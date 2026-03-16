@@ -56,7 +56,6 @@
     "add": "Add"
   },
   "calculator": {
-    "title": "Calculator",
     "currentValue": "Current Value",
     "unitPrice": "Unit Price",
     "totalInvestment": "Amount to Invest",
@@ -79,7 +78,6 @@
     "totalUnits": "Units subtotal",
     "totalFixed": "Fixed subtotal",
     "reset": "Reset",
-    "units": "Units",
     "fixed": "Fixed",
     "inactive": "Inactive"
   }
