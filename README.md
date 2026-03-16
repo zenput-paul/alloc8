@@ -1,73 +1,49 @@
-# React + TypeScript + Vite
+# Alloc8
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Investment portfolio management PWA that helps users define a portfolio and calculate how to distribute new investments across asset groups.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Portfolio management** — Create groups with target percentages and deviation thresholds, add unit-type (stocks) or fixed-type (bonds) assets, activate/deactivate assets
+- **Investment calculator** — Enter current values and an amount to invest; the app allocates across groups respecting targets, calculates units to buy, and distributes remainders
+- **Responsive layout** — Two-column calculator on desktop, single-column on mobile with bottom navigation
+- **Internationalization** — English and Spanish (Mexico), with browser language auto-detection
+- **Offline-capable PWA** — All data stored locally in IndexedDB via RxDB
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React + TypeScript** with Vite
+- **MUI (Material UI)** for components and theming
+- **RxDB** with Dexie storage for local persistence
+- **react-i18next** for internationalization
+- **vite-plugin-pwa** for service worker and installability
 
-## Expanding the ESLint configuration
+## Getting started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# Install Node.js 22 via asdf (recommended)
+asdf install nodejs
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Commands
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview production build |
+| `npx tsc --noEmit` | Type-check only |
+| `npx vitest run` | Run unit/component tests |
+| `npx playwright test` | Run e2e tests |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Testing
+
+- **Vitest** + React Testing Library for unit and component tests
+- **Playwright** for end-to-end tests covering portfolio CRUD, calculator flows, responsive layout, and i18n
+
+---
+
+Built in collaboration with [Claude Code](https://claude.ai/code).
