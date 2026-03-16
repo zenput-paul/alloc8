@@ -151,7 +151,7 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
               <ListItem key={asset.id} secondaryAction={<AssetActions asset={asset} />}>
                 <ListItemText
                   primary={asset.name}
-                  secondary={asset.type === 'unit' ? t('assetDialog.stocksUnits') : t('assetDialog.fixedAmount')}
+                  secondary={asset.type === 'unit' ? t('assetDialog.units') : t('assetDialog.fixedAmount')}
                   sx={{ opacity: asset.active ? 1 : 0.5 }}
                 />
               </ListItem>

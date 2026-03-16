@@ -25,7 +25,7 @@ describe('AssetDialog', () => {
 
     expect(screen.getByText('Add Asset')).toBeInTheDocument()
     expect(screen.getByLabelText('Name')).toHaveValue('')
-    expect(screen.getByRole('button', { name: 'Stocks (units)', pressed: true })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Units', pressed: true })).toBeInTheDocument()
   })
 
   it('renders edit mode with pre-filled fields', () => {

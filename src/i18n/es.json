@@ -48,7 +48,7 @@
     "editTitle": "Editar Activo",
     "name": "Nombre",
     "type": "Tipo",
-    "stocksUnits": "Acciones (unidades)",
+    "units": "Unidades",
     "fixedAmount": "Monto fijo",
     "nameRequired": "El nombre es obligatorio",
     "cancel": "Cancelar",
@@ -56,6 +56,31 @@
     "add": "Agregar"
   },
   "calculator": {
-    "title": "Calculadora"
+    "title": "Calculadora",
+    "currentValue": "Valor Actual",
+    "unitPrice": "Precio Unitario",
+    "totalInvestment": "Monto a Invertir",
+    "calculate": "Calcular",
+    "asset": "Activo",
+    "type": "Tipo",
+    "unitsToBuy": "Unidades a Comprar",
+    "amount": "Monto",
+    "remainder": "Un remanente de {{value}} no pudo ser asignado (no alcanza para otra unidad completa).",
+    "emptyState": "Agrega grupos y activos en la pestaña de Portafolio para comenzar a calcular.",
+    "percentageError": "Los porcentajes de los grupos deben sumar 100% antes de calcular.",
+    "noActiveAssetsError": "Cada grupo necesita al menos un activo habilitado.",
+    "calculationError": "Error de cálculo: {{message}}",
+    "currentPct": "Actual: {{value}}%",
+    "afterPct": "Después: {{value}}%",
+    "pctAboveTarget": "+{{value}}%",
+    "pctBelowTarget": "-{{value}}%",
+    "pctOnTarget": "en objetivo",
+    "total": "Total",
+    "totalUnits": "Subtotal unidades",
+    "totalFixed": "Subtotal fijo",
+    "reset": "Reiniciar",
+    "units": "Unidades",
+    "fixed": "Fijo",
+    "inactive": "Inactivo"
   }
 }

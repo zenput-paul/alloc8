@@ -97,6 +97,9 @@ describe('GroupCard', () => {
     expect(screen.getByText('2 assets')).toBeInTheDocument()
     expect(screen.getByText('AAPL')).toBeInTheDocument()
     expect(screen.getByText('Bond Fund')).toBeInTheDocument()
+    // Asset type labels
+    expect(screen.getByText('Units')).toBeInTheDocument()
+    expect(screen.getByText('Fixed amount')).toBeInTheDocument()
     const switches = screen.getAllByRole('switch')
     // AAPL is active, Bond Fund is inactive
     expect(switches[0]).toBeChecked()

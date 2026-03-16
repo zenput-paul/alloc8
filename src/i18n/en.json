@@ -48,7 +48,7 @@
     "editTitle": "Edit Asset",
     "name": "Name",
     "type": "Type",
-    "stocksUnits": "Stocks (units)",
+    "units": "Units",
     "fixedAmount": "Fixed amount",
     "nameRequired": "Name is required",
     "cancel": "Cancel",
@@ -56,6 +56,31 @@
     "add": "Add"
   },
   "calculator": {
-    "title": "Calculator"
+    "title": "Calculator",
+    "currentValue": "Current Value",
+    "unitPrice": "Unit Price",
+    "totalInvestment": "Amount to Invest",
+    "calculate": "Calculate",
+    "asset": "Asset",
+    "type": "Type",
+    "unitsToBuy": "Units to Buy",
+    "amount": "Amount",
+    "remainder": "Remainder of {{value}} could not be allocated (not enough for another whole unit).",
+    "emptyState": "Add groups and assets in the Portfolio tab to start calculating.",
+    "percentageError": "Group percentages must total 100% before calculating.",
+    "noActiveAssetsError": "Every group needs at least one active asset.",
+    "calculationError": "Calculation error: {{message}}",
+    "currentPct": "Current: {{value}}%",
+    "afterPct": "After: {{value}}%",
+    "pctAboveTarget": "+{{value}}%",
+    "pctBelowTarget": "-{{value}}%",
+    "pctOnTarget": "on target",
+    "total": "Total",
+    "totalUnits": "Units subtotal",
+    "totalFixed": "Fixed subtotal",
+    "reset": "Reset",
+    "units": "Units",
+    "fixed": "Fixed",
+    "inactive": "Inactive"
   }
 }

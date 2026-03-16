@@ -19,7 +19,7 @@ The app lets users define an investment portfolio and calculate how to distribut
 
 ### Investment calculation
 
-The user provides: current value of each asset, unit prices for unit-type assets, and the total amount to invest. The app distributes the new investment across groups respecting target percentages and deviation thresholds, then determines how many units to buy (for unit-type) or how much to allocate (for fixed-type). After initial allocation, leftover from unit-type rounding is reinvested by buying additional units, prioritizing groups furthest below target.
+The user provides: current value of each asset, unit prices for unit-type assets, and the total amount to invest. The app distributes the new investment across groups respecting target percentages and deviation thresholds, then determines how many units to buy (for unit-type) or how much to allocate (for fixed-type). After initial allocation, leftover from unit-type rounding is reinvested by buying additional units, prioritizing groups furthest below target. Any remaining amount after unit reinvestment is distributed to active fixed-type assets in groups still below their threshold.
 
 **Constraints:**
 - Group target percentages must total exactly 100%.
@@ -71,9 +71,12 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/components/portfolio/PortfolioView.tsx` - Portfolio view: group list, validation banner (% must total 100), CRUD
 - `src/components/portfolio/GroupCard.tsx` - Expandable card for a group, lists assets with Switch toggle, three-dot menu for edit/delete
 - `src/components/portfolio/GroupDialog.tsx` - Create/edit group dialog with validation and `%` InputAdornment
-- `src/components/portfolio/AssetDialog.tsx` - Create/edit asset dialog with Stocks (units)/Fixed amount type switching
-- `src/components/calculator/CalculatorView.tsx` - Calculator view (input form, results)
+- `src/components/portfolio/AssetDialog.tsx` - Create/edit asset dialog with Units/Fixed amount type switching
+- `src/components/calculator/CalculatorView.tsx` - Calculator orchestrator: loads data from RxDB, manages form state, computes group stats, two-column layout on desktop (form left, results right), single-column on mobile with scroll-to-results after calculation
+- `src/components/calculator/CalculatorInputForm.tsx` - Calculator input form: grouped asset fields (current value + unit price), amount to invest, calculate/reset buttons, required field validation
+- `src/components/calculator/CalculatorResults.tsx` - Results table grouped by group with percentage stats (current → after, color-coded by deviation from target), subtotals by asset type, remainder alert
 - `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies
+- `src/lib/formatNumber.ts` - Locale-aware number formatting (`formatCurrency`, `formatUnits`) using `Intl.NumberFormat`
 - `src/types.ts` - Core type definitions (Group, Asset, Portfolio, AssetInput, AssetAllocation)
 - `src/db/index.ts` - RxDB database creation and collection type exports
 - `src/db/schemas/group.ts` - Group collection schema
@@ -93,6 +96,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - **React Testing Library** for component rendering and interaction
 - **Playwright** for e2e tests (`playwright.config.ts`, `e2e/` directory)
 - Test setup file: `src/test-setup.ts` (imports jest-dom matchers)
+- Calculator component tests mock `rxdb-hooks` with a sentinel pattern that tracks collection names to distinguish groups vs assets queries
 
 ## Internationalization (i18n)
 

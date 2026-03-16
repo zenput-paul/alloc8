@@ -108,7 +108,7 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
               fullWidth
               size="small"
             >
-              <ToggleButton value="unit">{t('assetDialog.stocksUnits')}</ToggleButton>
+              <ToggleButton value="unit">{t('assetDialog.units')}</ToggleButton>
               <ToggleButton value="fixed">{t('assetDialog.fixedAmount')}</ToggleButton>
             </ToggleButtonGroup>
           </Box>
