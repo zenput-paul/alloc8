@@ -39,70 +39,50 @@ function App() {
     setLangAnchor(null)
   }
 
-  const languageButton = (
-    <>
-      <IconButton color="inherit" aria-label={t('nav.changeLanguage')} onClick={e => setLangAnchor(e.currentTarget)}>
-        <LanguageIcon />
-      </IconButton>
-      <Menu anchorEl={langAnchor} open={!!langAnchor} onClose={() => setLangAnchor(null)}>
-        {languages.map(lang => (
-          <MenuItem
-            key={lang.code}
-            selected={i18n.language.startsWith(lang.code)}
-            onClick={() => handleLanguageChange(lang.code)}
-          >
-            {lang.flag} {lang.label}
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
-  )
-
-  const content = view === 0 ? <PortfolioView /> : <CalculatorView />
-
-  if (isMobile) {
-    return (
-      <Box sx={{ pb: 7 }}>
-        <AppBar position="static">
-          <Toolbar variant="dense">
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Alloc8
-            </Typography>
-            {languageButton}
-          </Toolbar>
-        </AppBar>
-        {content}
+  return (
+    <Box sx={{ pb: isMobile ? 7 : 0 }}>
+      <AppBar position="static">
+        <Toolbar variant="dense">
+          <Typography variant="h6" sx={isMobile ? { flexGrow: 1 } : { mr: 2 }}>
+            Alloc8
+          </Typography>
+          {!isMobile && (
+            <Tabs
+              value={view}
+              onChange={(_, v) => setView(v)}
+              textColor="inherit"
+              indicatorColor="secondary"
+              sx={{ flexGrow: 1 }}
+            >
+              <Tab label={t('nav.portfolio')} icon={<PieChartIcon />} iconPosition="start" />
+              <Tab label={t('nav.calculator')} icon={<CalculateIcon />} iconPosition="start" />
+            </Tabs>
+          )}
+          <IconButton color="inherit" aria-label={t('nav.changeLanguage')} onClick={e => setLangAnchor(e.currentTarget)}>
+            <LanguageIcon />
+          </IconButton>
+          <Menu anchorEl={langAnchor} open={!!langAnchor} onClose={() => setLangAnchor(null)}>
+            {languages.map(lang => (
+              <MenuItem
+                key={lang.code}
+                selected={i18n.language.startsWith(lang.code)}
+                onClick={() => handleLanguageChange(lang.code)}
+              >
+                {lang.flag} {lang.label}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Toolbar>
+      </AppBar>
+      {view === 0 ? <PortfolioView /> : <CalculatorView />}
+      {isMobile && (
         <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
           <BottomNavigation value={view} onChange={(_, v) => setView(v)} showLabels>
             <BottomNavigationAction label={t('nav.portfolio')} icon={<PieChartIcon />} />
             <BottomNavigationAction label={t('nav.calculator')} icon={<CalculateIcon />} />
           </BottomNavigation>
         </Paper>
-      </Box>
-    )
-  }
-
-  return (
-    <Box>
-      <AppBar position="static">
-        <Toolbar variant="dense">
-          <Typography variant="h6" sx={{ mr: 2 }}>
-            Alloc8
-          </Typography>
-          <Tabs
-            value={view}
-            onChange={(_, v) => setView(v)}
-            textColor="inherit"
-            indicatorColor="secondary"
-            sx={{ flexGrow: 1 }}
-          >
-            <Tab label={t('nav.portfolio')} icon={<PieChartIcon />} iconPosition="start" />
-            <Tab label={t('nav.calculator')} icon={<CalculateIcon />} iconPosition="start" />
-          </Tabs>
-          {languageButton}
-        </Toolbar>
-      </AppBar>
-      {content}
+      )}
     </Box>
   )
 }

@@ -28,13 +28,20 @@ beforeEach(() => {
 })
 
 describe('App', () => {
+  it('shows app name in the app bar', () => {
+    render(<App />)
+
+    expect(screen.getByText('Alloc8')).toBeInTheDocument()
+  })
+
+  it('shows Portfolio view by default', () => {
+    render(<App />)
+
+    expect(screen.getByTestId('portfolio-view')).toBeInTheDocument()
+    expect(screen.queryByTestId('calculator-view')).not.toBeInTheDocument()
+  })
+
   describe('desktop layout', () => {
-    it('shows app name in the app bar', () => {
-      render(<App />)
-
-      expect(screen.getByText('Alloc8')).toBeInTheDocument()
-    })
-
     it('renders tabs for Portfolio and Calculator', () => {
       render(<App />)
 
@@ -42,11 +49,11 @@ describe('App', () => {
       expect(screen.getByRole('tab', { name: /Calculator/ })).toBeInTheDocument()
     })
 
-    it('shows Portfolio view by default', () => {
+    it('does not render bottom navigation', () => {
       render(<App />)
 
-      expect(screen.getByTestId('portfolio-view')).toBeInTheDocument()
-      expect(screen.queryByTestId('calculator-view')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Portfolio' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Calculator' })).not.toBeInTheDocument()
     })
 
     it('switches to Calculator view when Calculator tab is clicked', async () => {
@@ -65,12 +72,6 @@ describe('App', () => {
       mockIsMobile = true
     })
 
-    it('shows app name in the app bar', () => {
-      render(<App />)
-
-      expect(screen.getByText('Alloc8')).toBeInTheDocument()
-    })
-
     it('renders bottom navigation with Portfolio and Calculator', () => {
       render(<App />)
 
@@ -78,11 +79,20 @@ describe('App', () => {
       expect(screen.getByRole('button', { name: 'Calculator' })).toBeInTheDocument()
     })
 
-    it('shows Portfolio view by default', () => {
+    it('does not render tabs', () => {
       render(<App />)
 
-      expect(screen.getByTestId('portfolio-view')).toBeInTheDocument()
-      expect(screen.queryByTestId('calculator-view')).not.toBeInTheDocument()
+      expect(screen.queryByRole('tab')).not.toBeInTheDocument()
+    })
+
+    it('switches to Calculator view when Calculator button is clicked', async () => {
+      const user = userEvent.setup()
+      render(<App />)
+
+      await user.click(screen.getByRole('button', { name: 'Calculator' }))
+
+      expect(screen.getByTestId('calculator-view')).toBeInTheDocument()
+      expect(screen.queryByTestId('portfolio-view')).not.toBeInTheDocument()
     })
   })
 
