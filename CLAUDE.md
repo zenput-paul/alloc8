@@ -79,7 +79,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/components/calculator/CalculatorResults.tsx` - Results table grouped by group with percentage stats (current → after, color-coded by deviation from target), subtotals by asset type, remainder alert
 - `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies. Uses `ON_TARGET_EPSILON` (0.01%) to avoid floating-point noise in on-target checks
 - `src/lib/formatNumber.ts` - Locale-aware number formatting (`formatCurrency`, `formatUnits`) using `Intl.NumberFormat`
-- `src/types.ts` - Core type definitions (Group, Asset, AssetInput, AssetAllocation, GroupStats)
+- `src/types.ts` - Core domain types (Group, Asset, AssetInput, AssetAllocation, GroupStats)
 - `src/db/index.ts` - RxDB database creation and collection type exports
 - `src/db/schemas/group.ts` - Group collection schema
 - `src/db/schemas/asset.ts` - Asset collection schema (uses `ref: 'groups'` for groupId)

@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { useRxCollection, useRxQuery } from 'rxdb-hooks'
 import { useTranslation } from 'react-i18next'
-import type { Group, Asset, AssetInput, AssetFormValues, GroupStats } from '../../types'
+import type { Group, Asset, AssetInput, GroupStats } from '../../types'
 import { calculateAllocations } from '../../lib/calculator'
 import type { AllocationResult } from '../../lib/calculator'
+
+export interface AssetFormValues {
+  currentValue: string
+  unitPrice: string
+}
 
 export function useCalculator() {
   const { t } = useTranslation()

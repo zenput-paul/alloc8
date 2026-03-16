@@ -11,7 +11,8 @@ import {
 import CalculateIcon from '@mui/icons-material/Calculate'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import { useTranslation } from 'react-i18next'
-import type { Group, Asset, AssetFormValues } from '../../types'
+import type { Group, Asset } from '../../types'
+import type { AssetFormValues } from './useCalculator'
 
 interface CalculatorInputFormProps {
   groups: Group[]

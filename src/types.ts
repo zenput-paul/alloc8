@@ -28,11 +28,6 @@ export interface AssetAllocation {
   amountToInvest: number
 }
 
-export interface AssetFormValues {
-  currentValue: string
-  unitPrice: string
-}
-
 export interface GroupStats {
   currentPct: number
   afterPct: number

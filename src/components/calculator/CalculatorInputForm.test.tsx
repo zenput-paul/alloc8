@@ -2,7 +2,8 @@ import { vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { CalculatorInputForm } from './CalculatorInputForm'
-import type { Group, Asset, AssetFormValues } from '../../types'
+import type { Group, Asset } from '../../types'
+import type { AssetFormValues } from './useCalculator'
 
 const groups: Group[] = [
   { id: 'g1', name: 'Stocks', targetPercentage: 60, deviationThreshold: 5 },
