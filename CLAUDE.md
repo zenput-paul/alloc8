@@ -61,6 +61,8 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `/test` - Run Vitest (optionally with a file path)
 - `/commit` - Run checks, then commit and push
 - `/i18n` - Check translation files for missing or unused keys
+- `/cleanup` - Find dead code: unused types, exports, and i18n keys
+- `/simplify` - Review changed code for reuse, quality, and efficiency (built-in)
 - `/update-docs` - Update CLAUDE.md based on recent changes
 
 ## Architecture

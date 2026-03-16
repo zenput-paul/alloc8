@@ -61,7 +61,6 @@
     "totalInvestment": "Monto a Invertir",
     "calculate": "Calcular",
     "asset": "Activo",
-    "type": "Tipo",
     "unitsToBuy": "Unidades a Comprar",
     "amount": "Monto",
     "remainder": "Un remanente de {{value}} no pudo ser asignado (no alcanza para otra unidad completa).",
@@ -78,7 +77,6 @@
     "totalUnits": "Subtotal unidades",
     "totalFixed": "Subtotal fijo",
     "reset": "Reiniciar",
-    "fixed": "Fijo",
     "inactive": "Inactivo"
   }
 }

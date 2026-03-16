@@ -61,7 +61,6 @@
     "totalInvestment": "Amount to Invest",
     "calculate": "Calculate",
     "asset": "Asset",
-    "type": "Type",
     "unitsToBuy": "Units to Buy",
     "amount": "Amount",
     "remainder": "Remainder of {{value}} could not be allocated (not enough for another whole unit).",
@@ -78,7 +77,6 @@
     "totalUnits": "Units subtotal",
     "totalFixed": "Fixed subtotal",
     "reset": "Reset",
-    "fixed": "Fixed",
     "inactive": "Inactive"
   }
 }
