@@ -22,6 +22,8 @@
     "noActiveAssets": "Este grupo no tiene activos habilitados. La calculadora requiere al menos uno.",
     "noAssetsYet": "No hay activos aún — agrega uno para comenzar",
     "inactiveHint": "Los activos inactivos aún cuentan para el valor actual del grupo pero no recibirán nuevas inversiones.",
+    "expand": "Expandir",
+    "options": "Opciones",
     "addAsset": "Agregar Activo",
     "edit": "Editar",
     "delete": "Eliminar",

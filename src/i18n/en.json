@@ -22,6 +22,8 @@
     "noActiveAssets": "This group has no active assets. The calculator requires at least one.",
     "noAssetsYet": "No assets yet — add one to get started",
     "inactiveHint": "Inactive assets still count toward the group's current value but won't receive new investments.",
+    "expand": "Expand",
+    "options": "Options",
     "addAsset": "Add Asset",
     "edit": "Edit",
     "delete": "Delete",

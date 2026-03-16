@@ -84,10 +84,10 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
           checked={asset.active}
           onChange={() => handleToggleActive(asset)}
         />
-        <IconButton size="small" onClick={() => handleEditAsset(asset)}>
+        <IconButton size="small" onClick={() => handleEditAsset(asset)} aria-label={t('group.edit')}>
           <EditIcon fontSize="small" />
         </IconButton>
-        <IconButton size="small" onClick={() => setDeletingAsset(asset)}>
+        <IconButton size="small" onClick={() => setDeletingAsset(asset)} aria-label={t('group.delete')}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       </>
@@ -114,7 +114,7 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
               </Stack>
             </Box>
             <Stack direction="row" spacing={0.5}>
-              <IconButton size="small" onClick={e => setMenuAnchor(e.currentTarget)}>
+              <IconButton size="small" onClick={e => setMenuAnchor(e.currentTarget)} aria-label={t('group.options')}>
                 <MoreVertIcon fontSize="small" />
               </IconButton>
               <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={() => setMenuAnchor(null)}>
@@ -130,6 +130,7 @@ export function GroupCard({ group, onEdit, onDelete, defaultExpanded = false }: 
               <IconButton
                 size="small"
                 onClick={() => setExpanded(!expanded)}
+                aria-label={t('group.expand')}
                 sx={{
                   transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
                   transition: 'transform 0.2s',

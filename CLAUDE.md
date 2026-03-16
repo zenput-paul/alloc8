@@ -37,12 +37,14 @@ The user provides: current value of each asset, unit prices for unit-type assets
 
 ## Workflow
 
+- Never change application behavior to make a test pass — fix the test to match intended behavior, or clarify the expected behavior first
 - When making code changes, always create or update related tests
 - After changes, check if CLAUDE.md needs updating (new files, patterns, architecture, commands)
 - Run `/check` before every commit — do not commit if checks fail
 - Run `/i18n` after adding or modifying UI strings to catch missing translations
 - Work one phase at a time — complete and verify before moving to the next
 - Prefer explicit behavior over implicit defaults (no silent coercion, require intentional values)
+- All interactive elements without visible text (IconButtons, icon-only controls) must have an `aria-label` using an i18n key — for both accessibility and e2e testability
 - Spanish translations (`es.json`) should be reviewed by a native speaker — flag regional variations
 
 ## Commands
@@ -98,6 +100,12 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - **Vitest** + **jsdom** for unit/component tests (`vitest.config.ts`)
 - **React Testing Library** for component rendering and interaction
 - **Playwright** for e2e tests (`playwright.config.ts`, `e2e/` directory)
+- `e2e/helpers.ts` — shared utilities: `clearDatabase`, `createGroup`, `addAsset`, `expandGroup`, `navigateTo`, `createStandardPortfolio`
+- `e2e/portfolio.spec.ts` — portfolio CRUD tests (group and asset create/edit/delete, deactivation, validation, cascade delete)
+- `e2e/calculator.spec.ts` — calculator flow tests (warnings, calculation with value verification, reset, inactive assets, remainder)
+- `e2e/i18n.spec.ts` — language switching test
+- E2e selectors rely on `aria-label`, `getByRole`, and `getByLabel` — keep aria-labels on interactive elements that lack visible text
+- `vitest.config.ts` excludes `e2e/**` so Playwright tests aren't picked up by Vitest
 - Test setup file: `src/test-setup.ts` (imports jest-dom matchers)
 - `CalculatorView` tests mock `useCalculator` (layout-only tests); `useCalculator` tests mock `rxdb-hooks` with a sentinel pattern that tracks collection names to distinguish groups vs assets queries
 
