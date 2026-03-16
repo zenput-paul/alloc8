@@ -79,6 +79,8 @@
     "totalUnits": "Units subtotal",
     "totalFixed": "Fixed subtotal",
     "reset": "Reset",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "investmentDetails": "Investment Details",
+    "allocationResults": "Allocation Results"
   }
 }

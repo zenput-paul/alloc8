@@ -1,6 +1,7 @@
 import { createRxDatabase, type RxDatabase, type RxCollection, addRxPlugin } from 'rxdb'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
 import { RxDBCleanupPlugin } from 'rxdb/plugins/cleanup'
+import { RxDBLeaderElectionPlugin } from 'rxdb/plugins/leader-election'
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode'
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv'
 import type { Group, Asset } from '../types'
@@ -8,6 +9,7 @@ import { groupSchema } from './schemas/group'
 import { assetSchema } from './schemas/asset'
 
 addRxPlugin(RxDBCleanupPlugin)
+addRxPlugin(RxDBLeaderElectionPlugin)
 
 if (import.meta.env.DEV) {
   addRxPlugin(RxDBDevModePlugin)

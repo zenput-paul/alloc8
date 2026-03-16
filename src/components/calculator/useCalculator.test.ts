@@ -118,6 +118,23 @@ describe('useCalculator', () => {
     expect(result.current.assetInputs['a1'].currentValue).toBe('500')
   })
 
+  it('preserves other fields as empty strings when updating a single field', () => {
+    mockGroups = validGroups
+    mockAssets = validAssets
+    const { result } = renderHook(() => useCalculator())
+
+    act(() => result.current.handleAssetInputChange('a1', 'currentValue', '500'))
+
+    // unitPrice should be initialized to '' rather than undefined
+    expect(result.current.assetInputs['a1'].unitPrice).toBe('')
+
+    act(() => result.current.handleAssetInputChange('a1', 'unitPrice', '100'))
+
+    // Both fields should be preserved
+    expect(result.current.assetInputs['a1'].currentValue).toBe('500')
+    expect(result.current.assetInputs['a1'].unitPrice).toBe('100')
+  })
+
   it('calculates allocations via handleCalculate', () => {
     mockGroups = validGroups
     mockAssets = validAssets

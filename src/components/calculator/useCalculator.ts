@@ -39,7 +39,7 @@ export function useCalculator() {
     setAssetInputs(prev => ({
       ...prev,
       [assetId]: {
-        ...prev[assetId],
+        ...(prev[assetId] ?? { currentValue: '', unitPrice: '' }),
         [field]: value,
       },
     }))

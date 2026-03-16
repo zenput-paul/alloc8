@@ -153,3 +153,40 @@ test('verifies allocation amounts', async ({ page }) => {
   await expect(aaplRow.getByRole('cell').nth(2)).toHaveText('1,000.00')
   await expect(page.getByText('could not be allocated')).not.toBeVisible()
 })
+
+test('shows sections side by side on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await createStandardPortfolio(page)
+  await navigateTo(page, 'Calculator')
+
+  const details = page.getByText('Investment Details')
+  const results = page.getByText('Allocation Results')
+  await expect(details).toBeVisible()
+  await expect(results).toBeVisible()
+
+  const detailsBox = await details.boundingBox()
+  const resultsBox = await results.boundingBox()
+
+  // Side by side: results should be to the right, at roughly the same vertical position
+  expect(resultsBox!.x).toBeGreaterThan(detailsBox!.x)
+  expect(Math.abs(resultsBox!.y - detailsBox!.y)).toBeLessThan(10)
+})
+
+test('stacks sections on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 })
+  await createStandardPortfolio(page)
+  // Mobile uses BottomNavigation (buttons) instead of Tabs
+  await page.getByRole('button', { name: 'Calculator' }).click()
+
+  const details = page.getByText('Investment Details')
+  const results = page.getByText('Allocation Results')
+  await expect(details).toBeVisible()
+  await expect(results).toBeVisible()
+
+  const detailsBox = await details.boundingBox()
+  const resultsBox = await results.boundingBox()
+
+  // Stacked: results should be below the details
+  expect(resultsBox!.y).toBeGreaterThan(detailsBox!.y)
+  expect(Math.abs(resultsBox!.x - detailsBox!.x)).toBeLessThan(10)
+})
