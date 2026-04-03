@@ -28,6 +28,7 @@ export { ON_TARGET_EPSILON };
 function validateInputs(
   groups: Group[],
   assets: Asset[],
+  assetInputs: AssetInput[],
   totalInvestment: number,
 ): void {
   if (!Number.isFinite(totalInvestment)) {
@@ -41,7 +42,7 @@ function validateInputs(
     (sum, g) => sum + g.targetPercentage,
     0,
   );
-  if (totalTargetPercentage !== 100) {
+  if (Math.abs(totalTargetPercentage - 100) > 0.001) {
     throw new Error(
       `Group target percentages total ${totalTargetPercentage}%, must equal 100%`,
     );
@@ -63,6 +64,25 @@ function validateInputs(
       throw new Error(`Group "${group.name}" has no active assets`);
     }
   }
+
+  const groupIds = new Set(groups.map((g) => g.id));
+  const inputMap = new Map(assetInputs.map((i) => [i.assetId, i]));
+  for (const asset of assets) {
+    if (!asset.active || !groupIds.has(asset.groupId)) continue;
+    const input = inputMap.get(asset.id);
+    if (!input) {
+      throw new Error(`Active asset "${asset.name}" has no input data`);
+    }
+    if (!Number.isFinite(input.currentValue) || input.currentValue < 0) {
+      throw new Error(`Asset "${asset.name}" has an invalid current value`);
+    }
+    if (
+      asset.type === 'unit' &&
+      (!Number.isFinite(input.unitPrice) || input.unitPrice < 0)
+    ) {
+      throw new Error(`Asset "${asset.name}" has an invalid unit price`);
+    }
+  }
 }
 
 function buildGroupContext(
@@ -81,13 +101,14 @@ function buildGroupContext(
   }
 
   for (const asset of assets) {
+    if (!groupCurrentValue.has(asset.groupId)) continue;
     const value = inputMap.get(asset.id)?.currentValue ?? 0;
     groupCurrentValue.set(
       asset.groupId,
-      (groupCurrentValue.get(asset.groupId) ?? 0) + value,
+      groupCurrentValue.get(asset.groupId)! + value,
     );
     if (asset.active) {
-      groupActiveAssets.get(asset.groupId)?.push(asset);
+      groupActiveAssets.get(asset.groupId)!.push(asset);
     }
   }
 
@@ -312,16 +333,17 @@ function reinvestRemainderInUnits(
           ctx.groupCurrentValue.get(group.id)! + groupAllocation.get(group.id)!;
         const gap =
           group.targetPercentage - (groupValue / ctx.futureTotal) * 100;
-        return { allocation: a, unitPrice, gap };
+        return { allocation: a, unitPrice, gap, groupId: asset.groupId };
       })
       .filter((x) => x.unitPrice > 0 && x.unitPrice <= totalRemainder)
       .sort((a, b) => b.gap - a.gap);
 
-    for (const { allocation, unitPrice } of unitAssets) {
+    for (const { allocation, unitPrice, groupId } of unitAssets) {
       if (unitPrice <= totalRemainder) {
         allocation.unitsToBuy = (allocation.unitsToBuy ?? 0) + 1;
         allocation.amountToInvest += unitPrice;
         totalRemainder -= unitPrice;
+        groupAllocation.set(groupId, groupAllocation.get(groupId)! + unitPrice);
         changed = true;
         break;
       }
@@ -430,7 +452,7 @@ export function calculateAllocations(
   assetInputs: AssetInput[],
   totalInvestment: number,
 ): AllocationResult {
-  validateInputs(groups, assets, totalInvestment);
+  validateInputs(groups, assets, assetInputs, totalInvestment);
 
   if (totalInvestment === 0) {
     const ctx = buildGroupContext(groups, assets, assetInputs, totalInvestment);

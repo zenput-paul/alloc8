@@ -84,7 +84,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/components/calculator/useCalculator.ts` - Calculator state hook: loads groups/assets from RxDB, manages form state, runs `calculateAllocations`, exposes `displayAllocations`/`displayRemainder` for the view
 - `src/components/calculator/CalculatorInputForm.tsx` - Calculator input form: grouped asset fields (current value + unit price), amount to invest, calculate/reset buttons, required field validation
 - `src/components/calculator/CalculatorResults.tsx` - Results table grouped by group with percentage stats (current → after, color-coded by deviation from target), subtotals by asset type, remainder alert
-- `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies. Uses `ON_TARGET_EPSILON` (0.01%) to avoid floating-point noise in on-target checks
+- `src/lib/calculator.ts` - Pure investment calculation function (`calculateAllocations`); no side effects, no UI dependencies. Exports `ON_TARGET_EPSILON` (0.05 percentage points) used by `CalculatorResults` to determine on-target display
 - `src/lib/formatNumber.ts` - Locale-aware number formatting (`formatCurrency`, `formatUnits`) using `Intl.NumberFormat`
 - `src/types.ts` - Core domain types (Group, Asset, AssetInput, AssetAllocation, GroupStats)
 - `src/db/index.ts` - RxDB database creation and collection type exports

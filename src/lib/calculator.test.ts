@@ -48,6 +48,40 @@ describe('calculateAllocations', () => {
       );
     });
 
+    it('accepts percentages that total 100% with floating-point rounding', () => {
+      const groups = [
+        makeGroup({
+          id: 'g1',
+          targetPercentage: 33.33,
+          deviationThreshold: 5,
+        }),
+        makeGroup({
+          id: 'g2',
+          targetPercentage: 33.33,
+          deviationThreshold: 5,
+        }),
+        makeGroup({
+          id: 'g3',
+          targetPercentage: 33.34,
+          deviationThreshold: 5,
+        }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'a2', groupId: 'g2' }),
+        makeAsset({ id: 'a3', groupId: 'g3' }),
+      ];
+      const inputs = [
+        makeInput('a1', 0),
+        makeInput('a2', 0),
+        makeInput('a3', 0),
+      ];
+
+      expect(() =>
+        calculateAllocations(groups, assets, inputs, 100),
+      ).not.toThrow();
+    });
+
     it('throws when a group has target percentage of 0%', () => {
       const groups = [
         makeGroup({ id: 'g1', targetPercentage: 0, deviationThreshold: 5 }),
@@ -131,6 +165,41 @@ describe('calculateAllocations', () => {
 
       expect(() => calculateAllocations(groups, assets, inputs, NaN)).toThrow(
         'Total investment must be a finite number',
+      );
+    });
+
+    it('throws when an active asset has no input data', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1' })];
+
+      expect(() => calculateAllocations(groups, assets, [], 100)).toThrow(
+        'Active asset "Asset a1" has no input data',
+      );
+    });
+
+    it('throws when an asset has negative current value', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1' })];
+      const inputs = [makeInput('a1', -100)];
+
+      expect(() => calculateAllocations(groups, assets, inputs, 100)).toThrow(
+        'Asset "Asset a1" has an invalid current value',
+      );
+    });
+
+    it('throws when a unit asset has negative unit price', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1', type: 'unit' })];
+      const inputs = [makeInput('a1', 100, -10)];
+
+      expect(() => calculateAllocations(groups, assets, inputs, 100)).toThrow(
+        'Asset "Asset a1" has an invalid unit price',
       );
     });
 
@@ -488,6 +557,40 @@ describe('calculateAllocations', () => {
       expect(result.remainder).toBeCloseTo(10);
     });
 
+    it('distributes extra units across groups using updated gaps', () => {
+      // g1 has an expensive unit ($40), g2 has a cheap unit ($3).
+      // After initial allocation, the large rounding remainder from g1
+      // creates enough leftover for multiple cheap g2 units.
+      // With updated gaps, after buying some g2 extras, g1's gap becomes
+      // larger and should eventually get its extra unit too.
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 50, deviationThreshold: 10 }),
+        makeGroup({ id: 'g2', targetPercentage: 50, deviationThreshold: 10 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1', type: 'unit' }),
+        makeAsset({ id: 'a2', groupId: 'g2', type: 'unit' }),
+      ];
+      // Each group gets $250 from initial allocation.
+      // a1: floor(250/40) = 6 units ($240), remainder $10
+      // a2: floor(250/3) = 83 units ($249), remainder $1
+      // Total remainder = $11. Reinvestment buys $3 units for g2 (or g1 if gap larger).
+      // g1 gap is bigger (only got $240 vs target $250), so g1 should get priority...
+      // but g1's unit costs $40 > $11 remainder. So g2 gets extras at $3 each.
+      // 3 extra g2 units ($9), remainder $2.
+      const inputs = [makeInput('a1', 0, 40), makeInput('a2', 0, 3)];
+
+      const result = calculateAllocations(groups, assets, inputs, 500);
+
+      const a1 = result.allocations.find((a) => a.assetId === 'a1')!;
+      const a2 = result.allocations.find((a) => a.assetId === 'a2')!;
+      expect(a1.unitsToBuy).toBe(6);
+      expect(a1.amountToInvest).toBe(240);
+      expect(a2.unitsToBuy).toBe(86);
+      expect(a2.amountToInvest).toBe(258);
+      expect(result.remainder).toBeCloseTo(2);
+    });
+
     it('allocates to mixed unit/fixed assets across groups with unit rounding remainder', () => {
       const groups = [
         makeGroup({ id: 'g1', targetPercentage: 35, deviationThreshold: 3 }),
@@ -532,7 +635,92 @@ describe('calculateAllocations', () => {
     });
   });
 
+  describe('edge cases', () => {
+    it('handles a single group at 100%', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 10 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1' })];
+      const inputs = [makeInput('a1', 500)];
+
+      const result = calculateAllocations(groups, assets, inputs, 200);
+
+      expect(result.allocations[0].amountToInvest).toBeCloseTo(200);
+      expect(result.remainder).toBeCloseTo(0);
+    });
+
+    it('ignores assets with orphan groupId', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'orphan', groupId: 'nonexistent', active: false }),
+      ];
+      const inputs = [makeInput('a1', 100), makeInput('orphan', 500)];
+
+      const result = calculateAllocations(groups, assets, inputs, 200);
+
+      // Orphan asset's value should not affect calculations
+      expect(result.groupStats.get('g1')!.currentPct).toBeCloseTo(100);
+      expect(
+        result.allocations.find((a) => a.assetId === 'a1')!.amountToInvest,
+      ).toBeCloseTo(200);
+    });
+
+    it('handles very large numbers without floating-point degradation', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),
+        makeGroup({ id: 'g2', targetPercentage: 40, deviationThreshold: 5 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'a2', groupId: 'g2' }),
+      ];
+      const inputs = [makeInput('a1', 1e12), makeInput('a2', 1e12)];
+
+      const result = calculateAllocations(groups, assets, inputs, 1e10);
+
+      const total = result.allocations.reduce(
+        (s, a) => s + a.amountToInvest,
+        0,
+      );
+      expect(total + result.remainder).toBeCloseTo(1e10);
+    });
+
+    it('returns entire investment as remainder when unit prices exceed investment', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1', type: 'unit' })];
+      const inputs = [makeInput('a1', 0, 1000)];
+
+      const result = calculateAllocations(groups, assets, inputs, 1);
+
+      expect(result.allocations[0].unitsToBuy).toBe(0);
+      expect(result.allocations[0].amountToInvest).toBe(0);
+      expect(result.remainder).toBeCloseTo(1);
+    });
+  });
+
   describe('groupStats', () => {
+    it('returns currentPct as 0 when all current values are zero', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),
+        makeGroup({ id: 'g2', targetPercentage: 40, deviationThreshold: 5 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'a2', groupId: 'g2' }),
+      ];
+      const inputs = [makeInput('a1', 0), makeInput('a2', 0)];
+
+      const result = calculateAllocations(groups, assets, inputs, 1000);
+
+      expect(result.groupStats.get('g1')!.currentPct).toBe(0);
+      expect(result.groupStats.get('g2')!.currentPct).toBe(0);
+    });
+
     it('returns current and after percentages', () => {
       const groups = [
         makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),

@@ -165,6 +165,71 @@ test('verifies allocation amounts', async ({ page }) => {
   await expect(page.getByText('could not be allocated')).not.toBeVisible();
 });
 
+test('recalculates after changing inputs', async ({ page }) => {
+  await createGroup(page, { name: 'Stocks', target: '100', deviation: '5' });
+  await addAsset(page, 'Stocks', { name: 'AAPL', type: 'unit' });
+
+  await navigateTo(page, 'Calculator');
+
+  await page.getByLabel('Amount to Invest').fill('1000');
+  await page.getByLabel('Current Value').fill('0');
+  await page.getByLabel('Unit Price').fill('100');
+
+  await page.getByRole('button', { name: 'Calculate' }).click();
+
+  const aaplRow = page.getByRole('row').filter({ hasText: 'AAPL' });
+  await expect(aaplRow.getByRole('cell').nth(1)).toHaveText('10');
+
+  // Change unit price and recalculate
+  await page.getByLabel('Unit Price').fill('200');
+  await page.getByRole('button', { name: 'Calculate' }).click();
+
+  await expect(aaplRow.getByRole('cell').nth(1)).toHaveText('5');
+});
+
+test('calculates with all fixed assets', async ({ page }) => {
+  await createGroup(page, { name: 'Bonds', target: '60', deviation: '5' });
+  await createGroup(page, { name: 'Savings', target: '40', deviation: '5' });
+  await addAsset(page, 'Bonds', { name: 'Treasury', type: 'fixed' });
+  await addAsset(page, 'Savings', { name: 'CD Fund', type: 'fixed' });
+
+  await navigateTo(page, 'Calculator');
+
+  const bondsSection = page.locator('.MuiCard-root', { hasText: 'Bonds' });
+  const savingsSection = page.locator('.MuiCard-root', { hasText: 'Savings' });
+
+  await page.getByLabel('Amount to Invest').fill('1000');
+  await bondsSection.getByLabel('Current Value').fill('0');
+  await savingsSection.getByLabel('Current Value').fill('0');
+
+  await page.getByRole('button', { name: 'Calculate' }).click();
+
+  // All fixed: no remainder, no units column values
+  const treasuryRow = page.getByRole('row').filter({ hasText: 'Treasury' });
+  const cdRow = page.getByRole('row').filter({ hasText: 'CD Fund' });
+  await expect(treasuryRow.getByRole('cell').nth(2)).toHaveText('600.00');
+  await expect(cdRow.getByRole('cell').nth(2)).toHaveText('400.00');
+  await expect(page.getByText('could not be allocated')).not.toBeVisible();
+});
+
+test('handles zero investment', async ({ page }) => {
+  await createGroup(page, { name: 'Stocks', target: '100', deviation: '5' });
+  await addAsset(page, 'Stocks', { name: 'AAPL', type: 'unit' });
+
+  await navigateTo(page, 'Calculator');
+
+  await page.getByLabel('Amount to Invest').fill('0');
+  await page.getByLabel('Current Value').fill('1000');
+  await page.getByLabel('Unit Price').fill('100');
+
+  await page.getByRole('button', { name: 'Calculate' }).click();
+
+  const aaplRow = page.getByRole('row').filter({ hasText: 'AAPL' });
+  await expect(aaplRow.getByRole('cell').nth(1)).toHaveText('0');
+  await expect(aaplRow.getByRole('cell').nth(2)).toHaveText('0.00');
+  await expect(page.getByText('could not be allocated')).not.toBeVisible();
+});
+
 test('shows sections side by side on desktop', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await createStandardPortfolio(page);
