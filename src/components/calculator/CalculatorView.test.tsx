@@ -134,6 +134,30 @@ describe('CalculatorView', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
+  it('shows placeholder when no result yet', () => {
+    mockCalc.hasData = true;
+    mockCalc.groups = validGroups;
+    mockCalc.assets = validAssets;
+    render(<CalculatorView />);
+    expect(
+      screen.getByText('Run a calculation to see results.'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Units to Buy')).not.toBeInTheDocument();
+  });
+
+  it('shows results table when result is present', () => {
+    mockCalc.hasData = true;
+    mockCalc.groups = validGroups;
+    mockCalc.assets = validAssets;
+    mockCalc.result = { allocations: [], remainder: 0 };
+    mockCalc.displayAllocations = [];
+    render(<CalculatorView />);
+    expect(
+      screen.queryByText('Run a calculation to see results.'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('Units to Buy')).toBeInTheDocument();
+  });
+
   it('does not show form or results while fetching', () => {
     mockCalc.isFetching = true;
     mockCalc.hasData = true;

@@ -53,22 +53,26 @@ export function CalculatorInputForm({
       }}
     >
       <Stack spacing={2}>
-        <TextField
-          label={t('calculator.totalInvestment')}
-          type="number"
-          fullWidth
-          required
-          slotProps={{
-            htmlInput: { min: 0, step: 'any' },
-            input: {
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
-            },
-          }}
-          value={totalInvestment}
-          onChange={(e) => onTotalInvestmentChange(e.target.value)}
-        />
+        <Card variant="outlined">
+          <CardContent>
+            <TextField
+              label={t('calculator.totalInvestment')}
+              type="number"
+              fullWidth
+              required
+              slotProps={{
+                htmlInput: { min: 0, step: 'any' },
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">$</InputAdornment>
+                  ),
+                },
+              }}
+              value={totalInvestment}
+              onChange={(e) => onTotalInvestmentChange(e.target.value)}
+            />
+          </CardContent>
+        </Card>
 
         {groups.map((group) => {
           const groupAssets = assets.filter((a) => a.groupId === group.id);

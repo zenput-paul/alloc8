@@ -49,6 +49,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - All interactive elements without visible text (IconButtons, icon-only controls) must have an `aria-label` using an i18n key — for both accessibility and e2e testability
 - Prefer a single JSX return per component — use responsive `sx` props or conditional rendering over duplicated mobile/desktop branches
 - Spanish translations (`es.json`) should be reviewed by a native speaker — flag regional variations
+- After running any review agent (`@pr-reviewer`, `@security-audit`, `@designer`, `@i18n-checker`), share the full findings with the user before making changes — let the user decide which items to address
 
 ## Commands
 
@@ -90,6 +91,7 @@ Custom subagents in `.claude/agents/`, invoked with `@name`:
 
 - `.mcp.json` — registers local MCP servers for Claude Code
 - `tools/screenshot-server/index.mjs` — MCP server that takes screenshots of the running app via Playwright. Auto-starts the Vite dev server on port 5199 if needed. Supports `click` parameter to interact with UI elements before capture (needed because the app uses React state for navigation, not URL routing). Uses `McpServer` + `registerTool` from `@modelcontextprotocol/sdk` with `zod` for input validation.
+- `tools/design-review.mjs` — Playwright script that populates the app with sample data and captures 30 screenshots across all views, dialogs, and states (desktop + mobile). Run with `node tools/design-review.mjs` (requires dev server on port 5199). Output goes to `tmp/design-review/`.
 
 ## Architecture
 

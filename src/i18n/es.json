@@ -2,7 +2,8 @@
   "nav": {
     "portfolio": "Portafolio",
     "calculator": "Calculadora",
-    "changeLanguage": "Cambiar idioma"
+    "changeLanguage": "Cambiar idioma",
+    "mainNavigation": "Navegación principal"
   },
   "portfolio": {
     "title": "Portafolio",
@@ -23,6 +24,8 @@
     "noAssetsYet": "No hay activos aún — agrega uno para comenzar",
     "inactiveHint": "Los activos inactivos aún cuentan para el valor actual del grupo pero no recibirán nuevas inversiones.",
     "expand": "Expandir",
+    "collapse": "Contraer",
+    "toggleActive": "Habilitar o deshabilitar {{name}}",
     "options": "Opciones",
     "addAsset": "Agregar Activo",
     "edit": "Editar",
@@ -81,6 +84,7 @@
     "reset": "Reiniciar",
     "inactive": "Inactivo",
     "investmentDetails": "Detalles de Inversión",
-    "allocationResults": "Resultados de Asignación"
+    "allocationResults": "Resultados de Asignación",
+    "noResults": "Realiza un cálculo para ver los resultados."
   }
 }

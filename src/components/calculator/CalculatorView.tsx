@@ -96,13 +96,22 @@ export function CalculatorView() {
               <Typography variant="h6" gutterBottom>
                 {t('calculator.allocationResults')}
               </Typography>
-              <CalculatorResults
-                groups={calc.groups}
-                assets={calc.assets}
-                allocations={calc.displayAllocations}
-                remainder={calc.displayRemainder}
-                groupStats={calc.groupStats}
-              />
+              {calc.result ? (
+                <CalculatorResults
+                  groups={calc.groups}
+                  assets={calc.assets}
+                  allocations={calc.displayAllocations}
+                  remainder={calc.displayRemainder}
+                  groupStats={calc.groupStats}
+                />
+              ) : (
+                <Typography
+                  color="text.secondary"
+                  sx={{ textAlign: 'center', mt: 4 }}
+                >
+                  {t('calculator.noResults')}
+                </Typography>
+              )}
             </Box>
           </Box>
         )}

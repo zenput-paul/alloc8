@@ -99,8 +99,10 @@ test('reset clears form and results', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Reset' })).not.toBeVisible();
   // Fields should be cleared
   await expect(page.getByLabel('Amount to Invest')).toHaveValue('');
-  // Empty results table remains visible (shows structure as a preview)
-  await expect(page.getByText('Units to Buy')).toBeVisible();
+  // Placeholder replaces the results table
+  await expect(
+    page.getByText('Run a calculation to see results.'),
+  ).toBeVisible();
 });
 
 test('shows remainder alert', async ({ page }) => {

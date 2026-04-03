@@ -41,85 +41,89 @@ async function ensureDevServer() {
 
 const server = new McpServer({ name: 'screenshot-server', version: '1.0.0' });
 
-server.registerTool('screenshot', {
-  description:
-    'Take a screenshot of the running app at a given viewport size. Returns a PNG image. Starts the dev server automatically if needed.',
-  inputSchema: {
-    path: z
-      .string()
-      .regex(/^[a-zA-Z0-9/_#-]*$/)
-      .default('/')
-      .describe('URL path to navigate to. Defaults to "/".'),
-    viewport: z
-      .enum(['mobile', 'desktop'])
-      .default('desktop')
-      .describe(
-        'Viewport size: "mobile" (375x667) or "desktop" (1280x800). Defaults to "desktop".',
-      ),
-    click: z
-      .array(z.string())
-      .optional()
-      .describe(
-        'Ordered list of aria-labels or text labels to click before taking the screenshot. Example: ["Calculator"] clicks the Calculator tab.',
-      ),
+server.registerTool(
+  'screenshot',
+  {
+    description:
+      'Take a screenshot of the running app at a given viewport size. Returns a PNG image. Starts the dev server automatically if needed.',
+    inputSchema: {
+      path: z
+        .string()
+        .regex(/^[a-zA-Z0-9/_#-]*$/)
+        .default('/')
+        .describe('URL path to navigate to. Defaults to "/".'),
+      viewport: z
+        .enum(['mobile', 'desktop'])
+        .default('desktop')
+        .describe(
+          'Viewport size: "mobile" (375x667) or "desktop" (1280x800). Defaults to "desktop".',
+        ),
+      click: z
+        .array(z.string())
+        .optional()
+        .describe(
+          'Ordered list of aria-labels or text labels to click before taking the screenshot. Example: ["Calculator"] clicks the Calculator tab.',
+        ),
+    },
   },
-}, async ({ path, viewport, click }) => {
-  const clicks = click ?? [];
-  const dimensions =
-    viewport === 'mobile'
-      ? { width: 375, height: 667 }
-      : { width: 1280, height: 800 };
+  async ({ path, viewport, click }) => {
+    const clicks = click ?? [];
+    const dimensions =
+      viewport === 'mobile'
+        ? { width: 375, height: 667 }
+        : { width: 1280, height: 800 };
 
-  let browser;
-  try {
-    await ensureDevServer();
+    let browser;
+    try {
+      await ensureDevServer();
 
-    browser = await chromium.launch();
-    const context = await browser.newContext({ viewport: dimensions });
-    const page = await context.newPage();
+      browser = await chromium.launch();
+      const context = await browser.newContext({ viewport: dimensions });
+      const page = await context.newPage();
 
-    await page.goto(`${BASE_URL}${path.replace(/^\//, '')}`, {
-      waitUntil: 'networkidle',
-    });
+      await page.goto(`${BASE_URL}${path.replace(/^\//, '')}`, {
+        waitUntil: 'networkidle',
+      });
 
-    // Wait for the app bar to be visible (MUI finished rendering)
-    await page.getByRole('banner').waitFor({ state: 'visible' });
+      // Wait for the app bar to be visible (MUI finished rendering)
+      await page.getByRole('banner').waitFor({ state: 'visible' });
 
-    // Click elements in order (by aria-label, role, or text)
-    for (const label of clicks) {
-      const locator = page
-        .getByRole('tab', { name: label })
-        .or(page.getByRole('button', { name: label }))
-        .or(page.getByText(label, { exact: true }));
-      await locator.first().click();
-      await page.waitForLoadState('networkidle');
+      // Click elements in order (by aria-label, role, or text)
+      for (const label of clicks) {
+        const locator = page
+          .getByRole('tab', { name: label })
+          .or(page.getByRole('button', { name: label }))
+          .or(page.getByText(label, { exact: true }));
+        await locator.first().click();
+        await page.waitForLoadState('networkidle');
+      }
+
+      // Screenshot directly to buffer — no temp file
+      const buffer = await page.screenshot({ fullPage: true });
+
+      return {
+        content: [
+          {
+            type: 'image',
+            data: buffer.toString('base64'),
+            mimeType: 'image/png',
+          },
+        ],
+      };
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `Screenshot failed: ${error.message}`,
+          },
+        ],
+      };
+    } finally {
+      if (browser) await browser.close();
     }
-
-    // Screenshot directly to buffer — no temp file
-    const buffer = await page.screenshot({ fullPage: true });
-
-    return {
-      content: [
-        {
-          type: 'image',
-          data: buffer.toString('base64'),
-          mimeType: 'image/png',
-        },
-      ],
-    };
-  } catch (error) {
-    return {
-      content: [
-        {
-          type: 'text',
-          text: `Screenshot failed: ${error.message}`,
-        },
-      ],
-    };
-  } finally {
-    if (browser) await browser.close();
-  }
-});
+  },
+);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);

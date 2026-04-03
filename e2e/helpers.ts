@@ -38,7 +38,7 @@ export async function expandGroup(page: Page, groupName: string) {
   const addAssetBtn = card.getByRole('button', { name: 'Add Asset' });
   const isExpanded = await addAssetBtn.isVisible().catch(() => false);
   if (!isExpanded) {
-    await card.getByRole('button', { name: 'Expand' }).click();
+    await card.getByRole('button', { name: /Expand|Collapse/ }).click();
     await addAssetBtn.waitFor({ state: 'visible' });
   }
   return card;

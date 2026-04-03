@@ -51,7 +51,6 @@ function App() {
               value={view}
               onChange={(_, v) => setView(v)}
               textColor="inherit"
-              indicatorColor="secondary"
               sx={{ flexGrow: 1 }}
             >
               <Tab
@@ -93,6 +92,8 @@ function App() {
       {view === 0 ? <PortfolioView /> : <CalculatorView />}
       {isMobile && (
         <Paper
+          component="nav"
+          aria-label={t('nav.mainNavigation')}
           sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
           elevation={3}
         >

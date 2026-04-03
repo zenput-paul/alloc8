@@ -69,7 +69,7 @@ export function PortfolioView() {
   }
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 2, mb: 2 }}>
+    <Container maxWidth="md" sx={{ mt: 2, mb: 2 }}>
       <Stack spacing={2}>
         <Stack
           direction="row"

@@ -11,6 +11,22 @@ const theme = createTheme({
       main: '#2E7D32',
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: ({ theme: th }) => ({
+          backgroundColor: th.palette.primary.contrastText,
+        }),
+      },
+    },
+  },
 });
 
 createRoot(document.getElementById('root')!).render(
