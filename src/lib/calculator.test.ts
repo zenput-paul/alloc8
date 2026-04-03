@@ -630,7 +630,92 @@ describe('calculateAllocations', () => {
     });
   });
 
+  describe('edge cases', () => {
+    it('handles a single group at 100%', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 10 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1' })];
+      const inputs = [makeInput('a1', 500)];
+
+      const result = calculateAllocations(groups, assets, inputs, 200);
+
+      expect(result.allocations[0].amountToInvest).toBeCloseTo(200);
+      expect(result.remainder).toBeCloseTo(0);
+    });
+
+    it('ignores assets with orphan groupId', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'orphan', groupId: 'nonexistent', active: false }),
+      ];
+      const inputs = [makeInput('a1', 100), makeInput('orphan', 500)];
+
+      const result = calculateAllocations(groups, assets, inputs, 200);
+
+      // Orphan asset's value should not affect calculations
+      expect(result.groupStats.get('g1')!.currentPct).toBeCloseTo(100);
+      expect(
+        result.allocations.find((a) => a.assetId === 'a1')!.amountToInvest,
+      ).toBeCloseTo(200);
+    });
+
+    it('handles very large numbers without floating-point degradation', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),
+        makeGroup({ id: 'g2', targetPercentage: 40, deviationThreshold: 5 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'a2', groupId: 'g2' }),
+      ];
+      const inputs = [makeInput('a1', 1e12), makeInput('a2', 1e12)];
+
+      const result = calculateAllocations(groups, assets, inputs, 1e10);
+
+      const total = result.allocations.reduce(
+        (s, a) => s + a.amountToInvest,
+        0,
+      );
+      expect(total + result.remainder).toBeCloseTo(1e10);
+    });
+
+    it('returns entire investment as remainder when unit prices exceed investment', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1', type: 'unit' })];
+      const inputs = [makeInput('a1', 0, 1000)];
+
+      const result = calculateAllocations(groups, assets, inputs, 1);
+
+      expect(result.allocations[0].unitsToBuy).toBe(0);
+      expect(result.allocations[0].amountToInvest).toBe(0);
+      expect(result.remainder).toBeCloseTo(1);
+    });
+  });
+
   describe('groupStats', () => {
+    it('returns currentPct as 0 when all current values are zero', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),
+        makeGroup({ id: 'g2', targetPercentage: 40, deviationThreshold: 5 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'a2', groupId: 'g2' }),
+      ];
+      const inputs = [makeInput('a1', 0), makeInput('a2', 0)];
+
+      const result = calculateAllocations(groups, assets, inputs, 1000);
+
+      expect(result.groupStats.get('g1')!.currentPct).toBe(0);
+      expect(result.groupStats.get('g2')!.currentPct).toBe(0);
+    });
+
     it('returns current and after percentages', () => {
       const groups = [
         makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),
