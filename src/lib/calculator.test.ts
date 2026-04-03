@@ -557,33 +557,38 @@ describe('calculateAllocations', () => {
       expect(result.remainder).toBeCloseTo(10);
     });
 
-    it('reinvests extra units using updated gap after each purchase', () => {
+    it('distributes extra units across groups using updated gaps', () => {
+      // g1 has an expensive unit ($40), g2 has a cheap unit ($3).
+      // After initial allocation, the large rounding remainder from g1
+      // creates enough leftover for multiple cheap g2 units.
+      // With updated gaps, after buying some g2 extras, g1's gap becomes
+      // larger and should eventually get its extra unit too.
       const groups = [
-        makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),
-        makeGroup({ id: 'g2', targetPercentage: 40, deviationThreshold: 5 }),
+        makeGroup({ id: 'g1', targetPercentage: 50, deviationThreshold: 10 }),
+        makeGroup({ id: 'g2', targetPercentage: 50, deviationThreshold: 10 }),
       ];
       const assets = [
         makeAsset({ id: 'a1', groupId: 'g1', type: 'unit' }),
         makeAsset({ id: 'a2', groupId: 'g2', type: 'unit' }),
       ];
-      // g1 gets 60% of 200 = 120 → 1 unit at $100 = $100, remainder $20
-      // g2 gets 40% of 200 = 80 → 1 unit at $50 = $50, remainder $30
-      // total remainder = $50, enough for 1 more unit of g2 ($50)
-      // g1 gap: 60 - (100+100)/(200+200)*100 = 60-50 = 10
-      // g2 gap: 40 - (100+50)/(200+200)*100 = 40-37.5 = 2.5
-      // g1 has bigger gap so gets the extra unit... but after buying:
-      // g1 gap becomes 60 - (100+200)/(400)*100 = 60-75 = -15 (over target)
-      // So if there were more remainder, g2 should get the next one
-      const inputs = [makeInput('a1', 100, 100), makeInput('a2', 100, 50)];
+      // Each group gets $250 from initial allocation.
+      // a1: floor(250/40) = 6 units ($240), remainder $10
+      // a2: floor(250/3) = 83 units ($249), remainder $1
+      // Total remainder = $11. Reinvestment buys $3 units for g2 (or g1 if gap larger).
+      // g1 gap is bigger (only got $240 vs target $250), so g1 should get priority...
+      // but g1's unit costs $40 > $11 remainder. So g2 gets extras at $3 each.
+      // 3 extra g2 units ($9), remainder $2.
+      const inputs = [makeInput('a1', 0, 40), makeInput('a2', 0, 3)];
 
-      const result = calculateAllocations(groups, assets, inputs, 200);
+      const result = calculateAllocations(groups, assets, inputs, 500);
 
       const a1 = result.allocations.find((a) => a.assetId === 'a1')!;
       const a2 = result.allocations.find((a) => a.assetId === 'a2')!;
-      // With updated gaps, reinvestment should correctly prioritize
-      expect(a1.unitsToBuy).toBeGreaterThanOrEqual(1);
-      expect(a2.unitsToBuy).toBeGreaterThanOrEqual(1);
-      expect(result.remainder).toBeCloseTo(0);
+      expect(a1.unitsToBuy).toBe(6);
+      expect(a1.amountToInvest).toBe(240);
+      expect(a2.unitsToBuy).toBe(86);
+      expect(a2.amountToInvest).toBe(258);
+      expect(result.remainder).toBeCloseTo(2);
     });
 
     it('allocates to mixed unit/fixed assets across groups with unit rounding remainder', () => {

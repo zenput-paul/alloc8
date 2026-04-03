@@ -65,9 +65,10 @@ function validateInputs(
     }
   }
 
+  const groupIds = new Set(groups.map((g) => g.id));
   const inputMap = new Map(assetInputs.map((i) => [i.assetId, i]));
   for (const asset of assets) {
-    if (!asset.active) continue;
+    if (!asset.active || !groupIds.has(asset.groupId)) continue;
     const input = inputMap.get(asset.id);
     if (!input) {
       throw new Error(`Active asset "${asset.name}" has no input data`);

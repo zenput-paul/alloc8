@@ -87,7 +87,7 @@ export function PortfolioView() {
           </Button>
         </Stack>
 
-        {groups.length > 0 && totalPercentage !== 100 && (
+        {groups.length > 0 && Math.abs(totalPercentage - 100) > 0.001 && (
           <Alert severity="warning">
             {t('portfolio.percentageWarning', { total: totalPercentage })}
           </Alert>

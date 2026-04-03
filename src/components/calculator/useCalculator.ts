@@ -36,7 +36,8 @@ export function useCalculator() {
     (sum, g) => sum + g.targetPercentage,
     0,
   );
-  const percentagesValid = groups.length > 0 && totalPercentage === 100;
+  const percentagesValid =
+    groups.length > 0 && Math.abs(totalPercentage - 100) <= 0.001;
   const allGroupsHaveActiveAssets = groups.every((g) =>
     assets.some((a) => a.groupId === g.id && a.active),
   );
@@ -77,7 +78,7 @@ export function useCalculator() {
       };
     });
 
-    const parsedTotal = parseFloat(totalInvestment) || 0;
+    const parsedTotal = Math.max(0, parseFloat(totalInvestment) || 0);
 
     try {
       const allocationResult = calculateAllocations(
