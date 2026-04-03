@@ -63,14 +63,6 @@ export function CalculatorResults({
     .filter((a) => a.type === 'fixed')
     .reduce((sum, a) => sum + a.amountToInvest, 0);
 
-  if (allocations.length === 0) {
-    return (
-      <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
-        {t('calculator.noResults')}
-      </Typography>
-    );
-  }
-
   return (
     <>
       <TableContainer>

@@ -82,7 +82,6 @@ export function PortfolioView() {
             startIcon={<AddIcon />}
             onClick={handleAddGroup}
             size="small"
-            sx={{ textTransform: 'none' }}
           >
             {t('portfolio.addGroup')}
           </Button>
