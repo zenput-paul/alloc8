@@ -84,6 +84,12 @@ Custom subagents in `.claude/agents/`, invoked with `@name`:
 - `@security-audit` - Audit dependencies and code for security vulnerabilities (Sonnet)
 - `@i18n-checker` - Check translations for missing/unused keys and quality issues (Sonnet)
 - `@product-manager` - Brainstorm features, discuss product direction, evaluate UX (Opus)
+- `@designer` - Review UI screenshots for visual quality, consistency, and UX issues (Sonnet)
+
+## MCP Tooling
+
+- `.mcp.json` — registers local MCP servers for Claude Code
+- `tools/screenshot-server/index.mjs` — MCP server that takes screenshots of the running app via Playwright. Auto-starts the Vite dev server on port 5199 if needed. Supports `click` parameter to interact with UI elements before capture (needed because the app uses React state for navigation, not URL routing). Uses `McpServer` + `registerTool` from `@modelcontextprotocol/sdk` with `zod` for input validation.
 
 ## Architecture
 

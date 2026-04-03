@@ -22,4 +22,6 @@ Perform a security audit:
 
 4. **Supply chain** — Check for suspicious or unmaintained dependencies with `npm outdated` and review any packages with very few downloads or recent ownership changes.
 
+5. **Config files** — When reviewing committed config files (`.mcp.json`, tool configs, etc.), only flag them if they contain actual secrets, tokens, or sensitive URLs. Local command references (e.g. `"command": "node", "args": [...]`) are safe to commit and should not be flagged.
+
 Report findings in a prioritized table with severity (Critical/High/Medium/Low), file paths, and recommended fixes. If nothing significant is found, confirm the app is clean and note any areas to watch as the app grows.
