@@ -72,8 +72,8 @@ export function useCalculator() {
       const inputs = assetInputs[asset.id];
       return {
         assetId: asset.id,
-        currentValue: parseFloat(inputs?.currentValue ?? '') || 0,
-        unitPrice: parseFloat(inputs?.unitPrice ?? '') || 0,
+        currentValue: Math.max(0, parseFloat(inputs?.currentValue ?? '') || 0),
+        unitPrice: Math.max(0, parseFloat(inputs?.unitPrice ?? '') || 0),
       };
     });
 
