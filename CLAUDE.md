@@ -49,6 +49,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - All interactive elements without visible text (IconButtons, icon-only controls) must have an `aria-label` using an i18n key — for both accessibility and e2e testability
 - Prefer a single JSX return per component — use responsive `sx` props or conditional rendering over duplicated mobile/desktop branches
 - Spanish translations (`es.json`) should be reviewed by a native speaker — flag regional variations
+- After running any review agent (`@pr-reviewer`, `@security-audit`, `@designer`, `@i18n-checker`), share the full findings with the user before making changes — let the user decide which items to address
 
 ## Commands
 
