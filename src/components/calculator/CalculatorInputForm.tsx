@@ -7,24 +7,28 @@ import {
   Stack,
   TextField,
   Typography,
-} from '@mui/material'
-import CalculateIcon from '@mui/icons-material/Calculate'
-import RestartAltIcon from '@mui/icons-material/RestartAlt'
-import { useTranslation } from 'react-i18next'
-import type { Group, Asset } from '../../types'
-import type { AssetFormValues } from './useCalculator'
+} from '@mui/material';
+import CalculateIcon from '@mui/icons-material/Calculate';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { useTranslation } from 'react-i18next';
+import type { Group, Asset } from '../../types';
+import type { AssetFormValues } from './useCalculator';
 
 interface CalculatorInputFormProps {
-  groups: Group[]
-  assets: Asset[]
-  assetInputs: Record<string, AssetFormValues>
-  totalInvestment: string
-  onAssetInputChange: (assetId: string, field: keyof AssetFormValues, value: string) => void
-  onTotalInvestmentChange: (value: string) => void
-  onCalculate: () => void
-  onReset: () => void
-  isValid: boolean
-  hasResult: boolean
+  groups: Group[];
+  assets: Asset[];
+  assetInputs: Record<string, AssetFormValues>;
+  totalInvestment: string;
+  onAssetInputChange: (
+    assetId: string,
+    field: keyof AssetFormValues,
+    value: string,
+  ) => void;
+  onTotalInvestmentChange: (value: string) => void;
+  onCalculate: () => void;
+  onReset: () => void;
+  isValid: boolean;
+  hasResult: boolean;
 }
 
 export function CalculatorInputForm({
@@ -39,13 +43,13 @@ export function CalculatorInputForm({
   isValid,
   hasResult,
 }: CalculatorInputFormProps) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <form
-      onSubmit={e => {
-        e.preventDefault()
-        onCalculate()
+      onSubmit={(e) => {
+        e.preventDefault();
+        onCalculate();
       }}
     >
       <Stack spacing={2}>
@@ -57,33 +61,46 @@ export function CalculatorInputForm({
           slotProps={{
             htmlInput: { min: 0, step: 'any' },
             input: {
-              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
             },
           }}
           value={totalInvestment}
-          onChange={e => onTotalInvestmentChange(e.target.value)}
+          onChange={(e) => onTotalInvestmentChange(e.target.value)}
         />
 
-        {groups.map(group => {
-          const groupAssets = assets.filter(a => a.groupId === group.id)
+        {groups.map((group) => {
+          const groupAssets = assets.filter((a) => a.groupId === group.id);
           return (
             <Card key={group.id} variant="outlined">
               <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
                   {group.name}
-                  <Typography component="span" variant="caption" sx={{ ml: 1, fontWeight: 'normal' }}>
+                  <Typography
+                    component="span"
+                    variant="caption"
+                    sx={{ ml: 1, fontWeight: 'normal' }}
+                  >
                     ({group.targetPercentage}%)
                   </Typography>
                 </Typography>
                 <Stack spacing={2}>
-                  {groupAssets.map(asset => {
-                    const inputs = assetInputs[asset.id] ?? { currentValue: '', unitPrice: '' }
+                  {groupAssets.map((asset) => {
+                    const inputs = assetInputs[asset.id] ?? {
+                      currentValue: '',
+                      unitPrice: '',
+                    };
                     return (
                       <Box key={asset.id}>
                         <Typography variant="body2" sx={{ mb: 0.5 }}>
                           {asset.name}
                           {!asset.active && (
-                            <Typography component="span" variant="caption" sx={{ ml: 1 }}>
+                            <Typography
+                              component="span"
+                              variant="caption"
+                              sx={{ ml: 1 }}
+                            >
                               ({t('calculator.inactive')})
                             </Typography>
                           )}
@@ -98,11 +115,21 @@ export function CalculatorInputForm({
                             slotProps={{
                               htmlInput: { min: 0, step: 'any' },
                               input: {
-                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    $
+                                  </InputAdornment>
+                                ),
                               },
                             }}
                             value={inputs.currentValue}
-                            onChange={e => onAssetInputChange(asset.id, 'currentValue', e.target.value)}
+                            onChange={(e) =>
+                              onAssetInputChange(
+                                asset.id,
+                                'currentValue',
+                                e.target.value,
+                              )
+                            }
                           />
                           {asset.type === 'unit' && (
                             <TextField
@@ -113,18 +140,24 @@ export function CalculatorInputForm({
                               required={asset.active}
                               slotProps={{ htmlInput: { min: 0, step: 'any' } }}
                               value={inputs.unitPrice}
-                              onChange={e => onAssetInputChange(asset.id, 'unitPrice', e.target.value)}
+                              onChange={(e) =>
+                                onAssetInputChange(
+                                  asset.id,
+                                  'unitPrice',
+                                  e.target.value,
+                                )
+                              }
                               disabled={!asset.active}
                             />
                           )}
                         </Stack>
                       </Box>
-                    )
+                    );
                   })}
                 </Stack>
               </CardContent>
             </Card>
-          )
+          );
         })}
 
         <Stack direction="row" spacing={1}>
@@ -152,5 +185,5 @@ export function CalculatorInputForm({
         </Stack>
       </Stack>
     </form>
-  )
+  );
 }

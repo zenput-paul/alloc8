@@ -11,4 +11,4 @@ export const assetSchema = {
   },
   required: ['id', 'groupId', 'name', 'type', 'active'],
   indexes: ['groupId'],
-} as const
+} as const;

@@ -9,4 +9,4 @@ export const groupSchema = {
     deviationThreshold: { type: 'number' },
   },
   required: ['id', 'name', 'targetPercentage', 'deviationThreshold'],
-} as const
+} as const;

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react';
 import {
   Alert,
   Box,
@@ -6,29 +6,39 @@ import {
   Container,
   Stack,
   Typography,
-} from '@mui/material'
-import { useTranslation } from 'react-i18next'
-import { CalculatorInputForm } from './CalculatorInputForm'
-import { CalculatorResults } from './CalculatorResults'
-import { useCalculator } from './useCalculator'
+} from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import { CalculatorInputForm } from './CalculatorInputForm';
+import { CalculatorResults } from './CalculatorResults';
+import { useCalculator } from './useCalculator';
 
 export function CalculatorView() {
-  const { t } = useTranslation()
-  const resultsRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation();
+  const resultsRef = useRef<HTMLDivElement>(null);
 
-  const calc = useCalculator()
-  const ready = !calc.isFetching && calc.hasData
+  const calc = useCalculator();
+  const ready = !calc.isFetching && calc.hasData;
 
   useEffect(() => {
     if (calc.result) {
-      resultsRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' })
+      resultsRef.current?.scrollIntoView?.({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
-  }, [calc.result])
+  }, [calc.result]);
 
   return (
     <Container
       maxWidth={false}
-      sx={{ mt: 2, mb: 2, maxWidth: theme => ({ xs: theme.breakpoints.values.sm, md: theme.breakpoints.values.lg }) }}
+      sx={{
+        mt: 2,
+        mb: 2,
+        maxWidth: (theme) => ({
+          xs: theme.breakpoints.values.sm,
+          md: theme.breakpoints.values.lg,
+        }),
+      }}
     >
       <Stack spacing={2}>
         {calc.isFetching && (
@@ -38,7 +48,10 @@ export function CalculatorView() {
         )}
 
         {!calc.isFetching && !calc.hasData && (
-          <Typography color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
+          <Typography
+            color="text.secondary"
+            sx={{ textAlign: 'center', mt: 4 }}
+          >
             {t('calculator.emptyState')}
           </Typography>
         )}
@@ -47,14 +60,25 @@ export function CalculatorView() {
           <Alert severity="warning">{t('calculator.percentageError')}</Alert>
         )}
         {ready && calc.percentagesValid && !calc.allGroupsHaveActiveAssets && (
-          <Alert severity="warning">{t('calculator.noActiveAssetsError')}</Alert>
+          <Alert severity="warning">
+            {t('calculator.noActiveAssetsError')}
+          </Alert>
         )}
         {calc.error && <Alert severity="error">{calc.error}</Alert>}
 
         {ready && (
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3, alignItems: 'flex-start' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: 3,
+              alignItems: 'flex-start',
+            }}
+          >
             <Box sx={{ flex: 1, minWidth: 0, width: '100%' }}>
-              <Typography variant="h6" gutterBottom>{t('calculator.investmentDetails')}</Typography>
+              <Typography variant="h6" gutterBottom>
+                {t('calculator.investmentDetails')}
+              </Typography>
               <CalculatorInputForm
                 groups={calc.groups}
                 assets={calc.assets}
@@ -69,7 +93,9 @@ export function CalculatorView() {
               />
             </Box>
             <Box sx={{ flex: 1, minWidth: 0, width: '100%' }} ref={resultsRef}>
-              <Typography variant="h6" gutterBottom>{t('calculator.allocationResults')}</Typography>
+              <Typography variant="h6" gutterBottom>
+                {t('calculator.allocationResults')}
+              </Typography>
               <CalculatorResults
                 groups={calc.groups}
                 assets={calc.assets}
@@ -82,5 +108,5 @@ export function CalculatorView() {
         )}
       </Stack>
     </Container>
-  )
+  );
 }

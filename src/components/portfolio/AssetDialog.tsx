@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -11,25 +11,30 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Typography,
-} from '@mui/material'
-import { useRxCollection } from 'rxdb-hooks'
-import { useTranslation } from 'react-i18next'
-import type { Asset, AssetType } from '../../types'
+} from '@mui/material';
+import { useRxCollection } from 'rxdb-hooks';
+import { useTranslation } from 'react-i18next';
+import type { Asset, AssetType } from '../../types';
 
 interface AssetDialogProps {
-  open: boolean
-  onClose: () => void
-  groupId: string
-  editItem?: Asset
+  open: boolean;
+  onClose: () => void;
+  groupId: string;
+  editItem?: Asset;
 }
 
-export function AssetDialog({ open, onClose, groupId, editItem }: AssetDialogProps) {
+export function AssetDialog({
+  open,
+  onClose,
+  groupId,
+  editItem,
+}: AssetDialogProps) {
   // Key changes each time the dialog opens, remounting the form to reset state
-  const [formKey, setFormKey] = useState(0)
+  const [formKey, setFormKey] = useState(0);
 
   function handleClose() {
-    onClose()
-    setFormKey(k => k + 1)
+    onClose();
+    setFormKey((k) => k + 1);
   }
 
   return (
@@ -41,35 +46,35 @@ export function AssetDialog({ open, onClose, groupId, editItem }: AssetDialogPro
         editItem={editItem}
       />
     </Dialog>
-  )
+  );
 }
 
 interface AssetDialogFormProps {
-  onClose: () => void
-  groupId: string
-  editItem?: Asset
+  onClose: () => void;
+  groupId: string;
+  editItem?: Asset;
 }
 
 function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
-  const collection = useRxCollection<Asset>('assets')
-  const [name, setName] = useState(editItem?.name ?? '')
-  const [type, setType] = useState<AssetType>(editItem?.type ?? 'unit')
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const { t } = useTranslation()
+  const collection = useRxCollection<Asset>('assets');
+  const [name, setName] = useState(editItem?.name ?? '');
+  const [type, setType] = useState<AssetType>(editItem?.type ?? 'unit');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { t } = useTranslation();
 
   function validate(): boolean {
-    const newErrors: Record<string, string> = {}
-    if (!name.trim()) newErrors.name = t('assetDialog.nameRequired')
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    const newErrors: Record<string, string> = {};
+    if (!name.trim()) newErrors.name = t('assetDialog.nameRequired');
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   }
 
   async function handleSave() {
-    if (!validate() || !collection) return
+    if (!validate() || !collection) return;
 
     if (editItem) {
-      const doc = await collection.findOne(editItem.id).exec()
-      await doc?.patch({ name: name.trim(), type })
+      const doc = await collection.findOne(editItem.id).exec();
+      await doc?.patch({ name: name.trim(), type });
     } else {
       await collection.insert({
         id: crypto.randomUUID(),
@@ -77,21 +82,28 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
         name: name.trim(),
         type,
         active: true,
-      })
+      });
     }
 
-    onClose()
+    onClose();
   }
 
   return (
-    <form onSubmit={e => { e.preventDefault(); handleSave() }}>
-      <DialogTitle>{editItem ? t('assetDialog.editTitle') : t('assetDialog.addTitle')}</DialogTitle>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSave();
+      }}
+    >
+      <DialogTitle>
+        {editItem ? t('assetDialog.editTitle') : t('assetDialog.addTitle')}
+      </DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           <TextField
             label={t('assetDialog.name')}
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             error={!!errors.name}
             helperText={errors.name}
             autoFocus
@@ -104,12 +116,16 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
             <ToggleButtonGroup
               value={type}
               exclusive
-              onChange={(_, v) => { if (v) setType(v as AssetType) }}
+              onChange={(_, v) => {
+                if (v) setType(v as AssetType);
+              }}
               fullWidth
               size="small"
             >
               <ToggleButton value="unit">{t('assetDialog.units')}</ToggleButton>
-              <ToggleButton value="fixed">{t('assetDialog.fixedAmount')}</ToggleButton>
+              <ToggleButton value="fixed">
+                {t('assetDialog.fixedAmount')}
+              </ToggleButton>
             </ToggleButtonGroup>
           </Box>
         </Stack>
@@ -121,5 +137,5 @@ function AssetDialogForm({ onClose, groupId, editItem }: AssetDialogFormProps) {
         </Button>
       </DialogActions>
     </form>
-  )
+  );
 }

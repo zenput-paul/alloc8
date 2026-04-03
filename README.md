@@ -30,14 +30,14 @@ npm run dev
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start dev server |
-| `npm run build` | Type-check and build for production |
-| `npm run preview` | Preview production build |
-| `npx tsc --noEmit` | Type-check only |
-| `npx vitest run` | Run unit/component tests |
-| `npx playwright test` | Run e2e tests |
+| Command               | Description                         |
+| --------------------- | ----------------------------------- |
+| `npm run dev`         | Start dev server                    |
+| `npm run build`       | Type-check and build for production |
+| `npm run preview`     | Preview production build            |
+| `npx tsc --noEmit`    | Type-check only                     |
+| `npx vitest run`      | Run unit/component tests            |
+| `npx playwright test` | Run e2e tests                       |
 
 ## Testing
 

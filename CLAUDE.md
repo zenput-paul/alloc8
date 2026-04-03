@@ -22,6 +22,7 @@ The app lets users define an investment portfolio and calculate how to distribut
 The user provides: current value of each asset, unit prices for unit-type assets, and the total amount to invest. The app distributes the new investment across groups respecting target percentages and deviation thresholds, then determines how many units to buy (for unit-type) or how much to allocate (for fixed-type). After initial allocation, leftover from unit-type rounding is reinvested by buying additional units, prioritizing groups furthest below target. Any remaining amount after unit reinvestment is distributed to active fixed-type assets in groups still below their threshold.
 
 **Constraints:**
+
 - Group target percentages must total exactly 100%.
 - Every group must have a target percentage > 0%.
 - Deviation threshold must be less than the target percentage.
