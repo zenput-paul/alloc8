@@ -21,8 +21,8 @@ const theme = createTheme({
     },
     MuiTabs: {
       styleOverrides: {
-        indicator: ({ theme: t }) => ({
-          backgroundColor: t.palette.primary.contrastText,
+        indicator: ({ theme: th }) => ({
+          backgroundColor: th.palette.primary.contrastText,
         }),
       },
     },

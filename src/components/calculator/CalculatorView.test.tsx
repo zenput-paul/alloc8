@@ -155,6 +155,7 @@ describe('CalculatorView', () => {
     expect(
       screen.queryByText('Run a calculation to see results.'),
     ).not.toBeInTheDocument();
+    expect(screen.getByText('Units to Buy')).toBeInTheDocument();
   });
 
   it('does not show form or results while fetching', () => {
