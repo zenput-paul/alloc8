@@ -48,6 +48,40 @@ describe('calculateAllocations', () => {
       );
     });
 
+    it('accepts percentages that total 100% with floating-point rounding', () => {
+      const groups = [
+        makeGroup({
+          id: 'g1',
+          targetPercentage: 33.33,
+          deviationThreshold: 5,
+        }),
+        makeGroup({
+          id: 'g2',
+          targetPercentage: 33.33,
+          deviationThreshold: 5,
+        }),
+        makeGroup({
+          id: 'g3',
+          targetPercentage: 33.34,
+          deviationThreshold: 5,
+        }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1' }),
+        makeAsset({ id: 'a2', groupId: 'g2' }),
+        makeAsset({ id: 'a3', groupId: 'g3' }),
+      ];
+      const inputs = [
+        makeInput('a1', 0),
+        makeInput('a2', 0),
+        makeInput('a3', 0),
+      ];
+
+      expect(() =>
+        calculateAllocations(groups, assets, inputs, 100),
+      ).not.toThrow();
+    });
+
     it('throws when a group has target percentage of 0%', () => {
       const groups = [
         makeGroup({ id: 'g1', targetPercentage: 0, deviationThreshold: 5 }),

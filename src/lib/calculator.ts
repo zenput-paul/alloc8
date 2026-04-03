@@ -41,7 +41,7 @@ function validateInputs(
     (sum, g) => sum + g.targetPercentage,
     0,
   );
-  if (totalTargetPercentage !== 100) {
+  if (Math.abs(totalTargetPercentage - 100) > 0.001) {
     throw new Error(
       `Group target percentages total ${totalTargetPercentage}%, must equal 100%`,
     );
