@@ -100,13 +100,14 @@ function buildGroupContext(
   }
 
   for (const asset of assets) {
+    if (!groupCurrentValue.has(asset.groupId)) continue;
     const value = inputMap.get(asset.id)?.currentValue ?? 0;
     groupCurrentValue.set(
       asset.groupId,
-      (groupCurrentValue.get(asset.groupId) ?? 0) + value,
+      groupCurrentValue.get(asset.groupId)! + value,
     );
     if (asset.active) {
-      groupActiveAssets.get(asset.groupId)?.push(asset);
+      groupActiveAssets.get(asset.groupId)!.push(asset);
     }
   }
 
