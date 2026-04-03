@@ -39,7 +39,7 @@ async function withViewports(page, name, fn) {
 
 async function run() {
   const browser = await chromium.launch();
-  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'en-US' });
   const page = await context.newPage();
 
   // Clear any existing data

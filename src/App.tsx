@@ -51,10 +51,7 @@ function App() {
               value={view}
               onChange={(_, v) => setView(v)}
               textColor="inherit"
-              sx={{
-                flexGrow: 1,
-                '& .MuiTabs-indicator': { backgroundColor: '#fff' },
-              }}
+              sx={{ flexGrow: 1 }}
             >
               <Tab
                 label={t('nav.portfolio')}
