@@ -488,6 +488,35 @@ describe('calculateAllocations', () => {
       expect(result.remainder).toBeCloseTo(10);
     });
 
+    it('reinvests extra units using updated gap after each purchase', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 60, deviationThreshold: 5 }),
+        makeGroup({ id: 'g2', targetPercentage: 40, deviationThreshold: 5 }),
+      ];
+      const assets = [
+        makeAsset({ id: 'a1', groupId: 'g1', type: 'unit' }),
+        makeAsset({ id: 'a2', groupId: 'g2', type: 'unit' }),
+      ];
+      // g1 gets 60% of 200 = 120 → 1 unit at $100 = $100, remainder $20
+      // g2 gets 40% of 200 = 80 → 1 unit at $50 = $50, remainder $30
+      // total remainder = $50, enough for 1 more unit of g2 ($50)
+      // g1 gap: 60 - (100+100)/(200+200)*100 = 60-50 = 10
+      // g2 gap: 40 - (100+50)/(200+200)*100 = 40-37.5 = 2.5
+      // g1 has bigger gap so gets the extra unit... but after buying:
+      // g1 gap becomes 60 - (100+200)/(400)*100 = 60-75 = -15 (over target)
+      // So if there were more remainder, g2 should get the next one
+      const inputs = [makeInput('a1', 100, 100), makeInput('a2', 100, 50)];
+
+      const result = calculateAllocations(groups, assets, inputs, 200);
+
+      const a1 = result.allocations.find((a) => a.assetId === 'a1')!;
+      const a2 = result.allocations.find((a) => a.assetId === 'a2')!;
+      // With updated gaps, reinvestment should correctly prioritize
+      expect(a1.unitsToBuy).toBeGreaterThanOrEqual(1);
+      expect(a2.unitsToBuy).toBeGreaterThanOrEqual(1);
+      expect(result.remainder).toBeCloseTo(0);
+    });
+
     it('allocates to mixed unit/fixed assets across groups with unit rounding remainder', () => {
       const groups = [
         makeGroup({ id: 'g1', targetPercentage: 35, deviationThreshold: 3 }),

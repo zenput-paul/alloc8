@@ -312,16 +312,17 @@ function reinvestRemainderInUnits(
           ctx.groupCurrentValue.get(group.id)! + groupAllocation.get(group.id)!;
         const gap =
           group.targetPercentage - (groupValue / ctx.futureTotal) * 100;
-        return { allocation: a, unitPrice, gap };
+        return { allocation: a, unitPrice, gap, groupId: asset.groupId };
       })
       .filter((x) => x.unitPrice > 0 && x.unitPrice <= totalRemainder)
       .sort((a, b) => b.gap - a.gap);
 
-    for (const { allocation, unitPrice } of unitAssets) {
+    for (const { allocation, unitPrice, groupId } of unitAssets) {
       if (unitPrice <= totalRemainder) {
         allocation.unitsToBuy = (allocation.unitsToBuy ?? 0) + 1;
         allocation.amountToInvest += unitPrice;
         totalRemainder -= unitPrice;
+        groupAllocation.set(groupId, groupAllocation.get(groupId)! + unitPrice);
         changed = true;
         break;
       }
