@@ -66,7 +66,11 @@ The user provides: current value of each asset, unit prices for unit-type assets
 
 - `/check` - Run type-check, lint, tests, and IDE diagnostics
 - `/test` - Run Vitest (optionally with a file path)
-- `/commit` - Run checks, then commit and push
+- `/commit` - Update docs, run checks, then commit and push
+- `/pr` - Push branch and generate PR title/description
+- `/branch <name>` - Start a new feature branch from latest main
+- `/review` - Run `@pr-reviewer` on the current branch
+- `/audit` - Run `@security-audit` on dependencies and code
 - `/i18n` - Check translation files for missing or unused keys
 - `/cleanup` - Find dead code: unused types, exports, and i18n keys
 - `/simplify` - Review changed code for reuse, quality, and efficiency (built-in)
