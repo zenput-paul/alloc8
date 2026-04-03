@@ -39,7 +39,10 @@ async function withViewports(page, name, fn) {
 
 async function run() {
   const browser = await chromium.launch();
-  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, locale: 'en-US' });
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 800 },
+    locale: 'en-US',
+  });
   const page = await context.newPage();
 
   // Clear any existing data
@@ -188,13 +191,17 @@ async function run() {
 
   // 16. Language switch to Spanish
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.getByRole('button', { name: /Change language|Cambiar idioma/ }).click();
+  await page
+    .getByRole('button', { name: /Change language|Cambiar idioma/ })
+    .click();
   await page.getByRole('menuitem', { name: /Español/ }).click();
   await page.waitForTimeout(300);
   await withViewports(page, 'calculator-results-spanish');
 
   // Switch back to English
-  await page.getByRole('button', { name: /Cambiar idioma|Change language/ }).click();
+  await page
+    .getByRole('button', { name: /Cambiar idioma|Change language/ })
+    .click();
   await page.getByRole('menuitem', { name: /English/ }).click();
 
   await browser.close();
