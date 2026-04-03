@@ -28,6 +28,7 @@ export { ON_TARGET_EPSILON };
 function validateInputs(
   groups: Group[],
   assets: Asset[],
+  assetInputs: AssetInput[],
   totalInvestment: number,
 ): void {
   if (!Number.isFinite(totalInvestment)) {
@@ -61,6 +62,24 @@ function validateInputs(
     const hasActive = assets.some((a) => a.groupId === group.id && a.active);
     if (!hasActive) {
       throw new Error(`Group "${group.name}" has no active assets`);
+    }
+  }
+
+  const inputMap = new Map(assetInputs.map((i) => [i.assetId, i]));
+  for (const asset of assets) {
+    if (!asset.active) continue;
+    const input = inputMap.get(asset.id);
+    if (!input) {
+      throw new Error(`Active asset "${asset.name}" has no input data`);
+    }
+    if (!Number.isFinite(input.currentValue) || input.currentValue < 0) {
+      throw new Error(`Asset "${asset.name}" has an invalid current value`);
+    }
+    if (
+      asset.type === 'unit' &&
+      (!Number.isFinite(input.unitPrice) || input.unitPrice < 0)
+    ) {
+      throw new Error(`Asset "${asset.name}" has an invalid unit price`);
     }
   }
 }
@@ -431,7 +450,7 @@ export function calculateAllocations(
   assetInputs: AssetInput[],
   totalInvestment: number,
 ): AllocationResult {
-  validateInputs(groups, assets, totalInvestment);
+  validateInputs(groups, assets, assetInputs, totalInvestment);
 
   if (totalInvestment === 0) {
     const ctx = buildGroupContext(groups, assets, assetInputs, totalInvestment);

@@ -168,6 +168,41 @@ describe('calculateAllocations', () => {
       );
     });
 
+    it('throws when an active asset has no input data', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1' })];
+
+      expect(() => calculateAllocations(groups, assets, [], 100)).toThrow(
+        'Active asset "Asset a1" has no input data',
+      );
+    });
+
+    it('throws when an asset has negative current value', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1' })];
+      const inputs = [makeInput('a1', -100)];
+
+      expect(() => calculateAllocations(groups, assets, inputs, 100)).toThrow(
+        'Asset "Asset a1" has an invalid current value',
+      );
+    });
+
+    it('throws when a unit asset has negative unit price', () => {
+      const groups = [
+        makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
+      ];
+      const assets = [makeAsset({ id: 'a1', groupId: 'g1', type: 'unit' })];
+      const inputs = [makeInput('a1', 100, -10)];
+
+      expect(() => calculateAllocations(groups, assets, inputs, 100)).toThrow(
+        'Asset "Asset a1" has an invalid unit price',
+      );
+    });
+
     it('throws for Infinity totalInvestment', () => {
       const groups = [
         makeGroup({ id: 'g1', targetPercentage: 100, deviationThreshold: 5 }),
