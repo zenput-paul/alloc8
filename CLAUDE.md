@@ -58,6 +58,8 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `npx vitest run` - Run unit/component tests
 - `npx vitest run <path>` - Run specific test file
 - `npx playwright test` - Run e2e tests
+- `npx prettier --write .` - Format all files with Prettier
+- `npx prettier --check .` - Check formatting without writing
 
 ### Slash commands
 
@@ -89,6 +91,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `src/db/schemas/asset.ts` - Asset collection schema (uses `ref: 'groups'` for groupId)
 - `src/db/DatabaseProvider.tsx` - Initializes RxDB and provides it via rxdb-hooks `Provider`
 - MUI's `createTheme()` in main.tsx controls the global theme (primary: `#2E7D32` dark green)
+- `.github/workflows/deploy.yml` - GitHub Actions workflow: runs tests, builds, and deploys to GitHub Pages on push to `main`
 - Styling is done via MUI's `sx` prop and component props (no separate CSS files)
 - MUI v7: use `slotProps` / `slots` API — never use deprecated props (`inputProps`, `InputProps`, `InputLabelProps`, etc.)
 - Dialogs use a key pattern: outer Dialog + inner form component that remounts via key on close
@@ -129,6 +132,20 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - IndexedDB is not encrypted — acceptable for current scope
 - If the app ever stores real account numbers or balances, add RxDB field encryption
 - RxDB cleanup plugin purges soft-deleted documents on startup (`src/db/index.ts`)
+
+## Formatting
+
+- **Prettier** with single-quote config (`.prettierrc.json`)
+- **eslint-config-prettier** disables ESLint rules that conflict with Prettier
+- Pre-commit hook (Husky + lint-staged) runs ESLint and Prettier on staged files
+- Run `npx prettier --write .` to format the entire codebase
+
+## Deployment
+
+- Hosted on **GitHub Pages** at `https://zenput-paul.github.io/alloc8/`
+- Auto-deploys on push to `main` via `.github/workflows/deploy.yml`
+- Vite `base: '/alloc8/'` is set for the GitHub Pages subpath
+- Workflow runs tests before building — broken code won't deploy
 
 ## PWA
 

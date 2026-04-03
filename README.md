@@ -17,6 +17,8 @@ Investment portfolio management PWA that helps users define a portfolio and calc
 - **RxDB** with Dexie storage for local persistence
 - **react-i18next** for internationalization
 - **vite-plugin-pwa** for service worker and installability
+- **Prettier** for code formatting
+- **GitHub Actions** for CI/CD to GitHub Pages
 
 ## Getting started
 
@@ -30,19 +32,25 @@ npm run dev
 
 ## Commands
 
-| Command               | Description                         |
-| --------------------- | ----------------------------------- |
-| `npm run dev`         | Start dev server                    |
-| `npm run build`       | Type-check and build for production |
-| `npm run preview`     | Preview production build            |
-| `npx tsc --noEmit`    | Type-check only                     |
-| `npx vitest run`      | Run unit/component tests            |
-| `npx playwright test` | Run e2e tests                       |
+| Command                  | Description                         |
+| ------------------------ | ----------------------------------- |
+| `npm run dev`            | Start dev server                    |
+| `npm run build`          | Type-check and build for production |
+| `npm run preview`        | Preview production build            |
+| `npx tsc --noEmit`       | Type-check only                     |
+| `npx vitest run`         | Run unit/component tests            |
+| `npx playwright test`    | Run e2e tests                       |
+| `npx prettier --check .` | Check code formatting               |
+| `npx prettier --write .` | Format all files                    |
 
 ## Testing
 
 - **Vitest** + React Testing Library for unit and component tests
 - **Playwright** for end-to-end tests covering portfolio CRUD, calculator flows, responsive layout, and i18n
+
+## Deployment
+
+Automatically deployed to [GitHub Pages](https://zenput-paul.github.io/alloc8/) on push to `main` via GitHub Actions. The workflow runs tests before building — broken code won't deploy.
 
 ---
 
