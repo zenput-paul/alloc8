@@ -72,6 +72,15 @@ The user provides: current value of each asset, unit prices for unit-type assets
 - `/simplify` - Review changed code for reuse, quality, and efficiency (built-in)
 - `/update-docs` - Update CLAUDE.md based on recent changes
 
+### Agents
+
+Custom subagents in `.claude/agents/`, invoked with `@name`:
+
+- `@pr-reviewer` - Review branch changes for correctness, test quality, and consistency (Sonnet)
+- `@security-audit` - Audit dependencies and code for security vulnerabilities (Sonnet)
+- `@i18n-checker` - Check translations for missing/unused keys and quality issues (Sonnet)
+- `@product-manager` - Brainstorm features, discuss product direction, evaluate UX (Opus)
+
 ## Architecture
 
 - `src/main.tsx` - Entry point; sets up MUI ThemeProvider, CssBaseline, and DatabaseProvider
