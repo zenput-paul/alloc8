@@ -25,7 +25,7 @@
     "inactiveHint": "Los activos inactivos aún cuentan para el valor actual del grupo pero no recibirán nuevas inversiones.",
     "expand": "Expandir",
     "collapse": "Contraer",
-    "toggleActive": "Activar/desactivar {{name}}",
+    "toggleActive": "Habilitar o deshabilitar {{name}}",
     "options": "Opciones",
     "addAsset": "Agregar Activo",
     "edit": "Editar",
@@ -85,6 +85,6 @@
     "inactive": "Inactivo",
     "investmentDetails": "Detalles de Inversión",
     "allocationResults": "Resultados de Asignación",
-    "noResults": "Ejecuta un cálculo para ver los resultados."
+    "noResults": "Realiza un cálculo para ver los resultados."
   }
 }
