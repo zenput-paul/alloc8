@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { formatCurrency, formatUnits } from './formatNumber';
 
 describe('formatCurrency', () => {

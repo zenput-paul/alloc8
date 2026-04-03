@@ -8,5 +8,17 @@ export default defineConfig({
     setupFiles: ['./src/test-setup.ts'],
     globals: true,
     exclude: ['e2e/**', '**/node_modules/**'],
+    deps: {
+      optimizer: {
+        web: {
+          include: [
+            '@mui/material',
+            '@mui/icons-material',
+            '@emotion/react',
+            '@emotion/styled',
+          ],
+        },
+      },
+    },
   },
 });

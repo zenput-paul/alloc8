@@ -1,3 +1,4 @@
+// @vitest-environment node
 import { calculateAllocations } from './calculator';
 import type { Group, Asset, AssetInput } from '../types';
 
