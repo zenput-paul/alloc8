@@ -2,7 +2,8 @@
   "nav": {
     "portfolio": "Portfolio",
     "calculator": "Calculator",
-    "changeLanguage": "Change language"
+    "changeLanguage": "Change language",
+    "mainNavigation": "Main navigation"
   },
   "portfolio": {
     "title": "Portfolio",
@@ -23,6 +24,8 @@
     "noAssetsYet": "No assets yet — add one to get started",
     "inactiveHint": "Inactive assets still count toward the group's current value but won't receive new investments.",
     "expand": "Expand",
+    "collapse": "Collapse",
+    "toggleActive": "Toggle {{name}} active",
     "options": "Options",
     "addAsset": "Add Asset",
     "edit": "Edit",
@@ -81,6 +84,7 @@
     "reset": "Reset",
     "inactive": "Inactive",
     "investmentDetails": "Investment Details",
-    "allocationResults": "Allocation Results"
+    "allocationResults": "Allocation Results",
+    "noResults": "Run a calculation to see results."
   }
 }

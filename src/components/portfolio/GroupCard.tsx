@@ -88,6 +88,7 @@ export function GroupCard({
           size="small"
           checked={asset.active}
           onChange={() => handleToggleActive(asset)}
+          aria-label={t('group.toggleActive', { name: asset.name })}
         />
         <IconButton
           size="small"
@@ -169,7 +170,8 @@ export function GroupCard({
               <IconButton
                 size="small"
                 onClick={() => setExpanded(!expanded)}
-                aria-label={t('group.expand')}
+                aria-label={expanded ? t('group.collapse') : t('group.expand')}
+                aria-expanded={expanded}
                 sx={{
                   transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
                   transition: 'transform 0.2s',
