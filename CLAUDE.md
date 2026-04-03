@@ -38,6 +38,7 @@ The user provides: current value of each asset, unit prices for unit-type assets
 
 ## Workflow
 
+- Work on feature branches, open a PR to merge into `main` — pushes to `main` trigger a production deploy
 - Never change application behavior to make a test pass — fix the test to match intended behavior, or clarify the expected behavior first
 - When making code changes, always create or update related tests
 - After changes, check if CLAUDE.md needs updating (new files, patterns, architecture, commands)
